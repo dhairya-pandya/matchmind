@@ -12,6 +12,7 @@ const path = require('path');
 
 require('../../js/engine.js');
 require('../../js/agents.js');
+require('../identity.js');
 require('../statsbomb.js');
 
 const MM = globalThis.MatchMind;
@@ -25,6 +26,7 @@ const match = fromStatsBomb(fixture.events, fixture.frames, {
   homeName: 'Home (synthetic)',
   awayName: 'Away (synthetic)',
   seed: fixture.seed,
+  linkIdentity: false, // round-trip checks coordinates in frame order; identity is tested in section 6
 });
 
 const TOL = 1e-6;
@@ -60,5 +62,53 @@ const out = runPipeline(match, '');
 assert.ok(out.keyMoments.length > 0, 'key moments produced');
 assert.ok(out.recap.length >= 2, 'recap produced');
 
+// 6. Identity: shuffle each frame, then check whether each slot keeps the same real player.
+// Truth comes from the fixture's expected positions in the original frame order.
+let seedState = 12345;
+const rnd = () => ((seedState = (seedState * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+const shuffled = {};
+const perms = {};
+for (const [id, frame] of Object.entries(fixture.frames)) {
+  const order = frame.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  shuffled[id] = order.map((i) => frame[i]);
+  perms[id] = order;
+}
+const common = { homeTeamId: fixture.homeTeamId, awayTeamId: fixture.awayTeamId, seed: fixture.seed };
+
+// For each event and adapter slot, which true player (fixture index) is in that slot?
+const truthKey = (m) => m.snaps.map((snap, i) => {
+  const want = fixture.expected[i].pos;
+  return snap.pos.map((p) => {
+    const j = want.findIndex((q) => q && Math.abs(q[0] - p[0]) < 1e-6 && Math.abs(q[1] - p[1]) < 1e-6);
+    return j;
+  });
+});
+const switchRate = (m) => {
+  const keys = truthKey(m);
+  let switches = 0;
+  let total = 0;
+  for (let id = 0; id < 22; id++) {
+    for (let i = 1; i < keys.length; i++) {
+      if (keys[i][id] < 0 || keys[i - 1][id] < 0) continue;
+      total++;
+      if (keys[i][id] !== keys[i - 1][id]) switches++;
+    }
+  }
+  return switches / total;
+};
+const linked = fromStatsBomb(fixture.events, shuffled, { ...common, linkIdentity: true });
+const unlinked = fromStatsBomb(fixture.events, shuffled, { ...common, linkIdentity: false });
+const rLinked = switchRate(linked);
+const rUnlinked = switchRate(unlinked);
+// Limit: nearest-position matching still swaps close players about 7% of the time on synthetic frames.
+// The threshold guards against regression; it is not a claim that identity is solved.
+assert.ok(rLinked < 0.10, `linked identity switch rate ${rLinked.toFixed(4)} too high`);
+assert.ok(rUnlinked > 5 * rLinked, `linking should cut switches (${rLinked.toFixed(4)} vs ${rUnlinked.toFixed(4)})`);
+
+console.log(`Identity: slot switch rate ${rLinked.toFixed(4)} linked vs ${rUnlinked.toFixed(4)} unlinked on shuffled frames.`);
 console.log(`OK: ${match.events.length} events, 22 players per snapshot, round trip within ${TOL}.`);
 console.log(`Pipeline: ${out.keyMoments.length} key moments, ${Object.keys(out.cfs).length} what-if shots.`);

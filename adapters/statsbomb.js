@@ -44,6 +44,16 @@
   }
 
   function fromStatsBomb(events, frames, opts) {
+    const slots = [null, null];
+    const linkSide = (side, list) => {
+      if (opts.linkIdentity === false || !slots[side]) {
+        slots[side] = list.slice();
+        return list;
+      }
+      const linked = global.MatchMind.identity.linkFrame(slots[side], list);
+      slots[side] = linked;
+      return linked;
+    };
     const homeId = opts.homeTeamId;
     const awayId = opts.awayTeamId;
     const teams = [
@@ -77,8 +87,9 @@
       if (!split) { dropped++; continue; }
 
       // Opponent-side frame: freeze frames use the same frame as the event's team.
-      const mates = split.mates;
-      const oppPos = split.opps;
+      // Keep each slot on the same player across frames (see identity.js).
+      const mates = linkSide(t, split.mates);
+      const oppPos = linkSide(1 - t, split.opps);
       // Snapshot positions indexed by player id: own side first for team t.
       const byId = new Array(22);
       for (let k = 0; k < PLAYERS_PER_SIDE; k++) {

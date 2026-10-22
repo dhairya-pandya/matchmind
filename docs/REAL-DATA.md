@@ -25,7 +25,7 @@ Events alone are not enough. Without positions the tactics agent cannot count th
 
 ## Limits to fix before real matches
 
-1. **Player identity.** Freeze frames have no player ids. Numbering by order means a number can refer to different players across events, which breaks player trails and heatmaps. The fix is a tracking feed with ids, or joining the event feed's player ids through lineups.
+1. **Player identity.** Freeze frames have no player ids. `adapters/identity.js` links each frame to the last one by minimum-distance assignment, which cuts slot swaps from 91% to 7% on shuffled synthetic frames. It is not solved: close players still swap, and a real feed needs tracking ids or lineup joins for trails and heatmaps to be reliable.
 2. **Half orientation.** Some feeds report attack direction per half, and some report it per event. The adapter does not flip sides at half time, so per-half views need a check against the lineup.
 3. **Tactical truth.** The optimizer scores against planted intents, which real matches don't have. For real data, the labels would have to come from expert annotation, or the thresholds would have to be checked against outcomes rather than labels. Expert annotation is the stronger option, and it would be a research project in its own right.
 4. **Model calibration.** The what-if's shot model is a heuristic. On real data, recalibrate it against observed goal rates from the feed, and show the result on screen the way the calibration panel does now.

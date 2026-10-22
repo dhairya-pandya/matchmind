@@ -71,4 +71,4 @@ Next, roughly in order:
 
 - A writer agent backed by a language model, with the heuristic as fallback. Needs a model key.
 - A tracking-data adapter, once a licence is in place.
-- Player identity across events, so trails and heatmaps stay correct on real feeds.
+- Player identity: frame linking cuts slot swaps from 91% to 7% on synthetic frames. Real feeds still need tracking ids, or the swaps remain.
