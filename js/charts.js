@@ -41,6 +41,7 @@
     for (const s of match.snaps) {
       for (const id of ids) {
         const p = s.pos[id];
+        if (!MM.engine.isOn(p)) continue;
         const c = clamp(Math.floor((p[0] / 105) * cols), 0, cols - 1);
         const r = clamp(Math.floor((p[1] / 68) * rows), 0, rows - 1);
         grid[r * cols + c]++;
@@ -85,7 +86,7 @@
     const series = [0, 1].map(() => new Array(91).fill(0));
     const counts = [0, 1].map(() => new Array(91).fill(0));
     for (const ev of match.events) {
-      if (ev.type === 'tackle') continue;
+      if (ev.type === 'tackle' || ev.type === 'sub') continue;
       series[ev.team][ev.minute] += ev.pressure;
       counts[ev.team][ev.minute] += 1;
     }
@@ -162,7 +163,7 @@
     const pos = match.snaps[cf.n].pos;
     const teamOf = match.players[cf.shooter].team;
     match.squad[teamOf].forEach((id) => {
-      if (id === cf.shooter || id === cf.mover) return;
+      if (id === cf.shooter || id === cf.mover || !MM.engine.isOn(pos[id])) return;
       const [px, py] = toPx(pos[id]);
       ctx.fillStyle = 'rgba(233, 239, 230, 0.35)';
       ctx.beginPath();
@@ -170,6 +171,7 @@
       ctx.fill();
     });
     match.squad[1 - teamOf].forEach((id) => {
+      if (!MM.engine.isOn(pos[id])) return;
       const [px, py] = toPx(pos[id]);
       ctx.fillStyle = 'rgba(255, 92, 108, 0.35)';
       ctx.beginPath();

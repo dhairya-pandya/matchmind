@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-22T18:29:27.459Z",
+  "generatedAt": "2026-10-22T18:38:03.771Z",
   "method": "SkillOpt-style loop, heuristic reflect and edit, numeric parameters only",
   "seeds": {
     "train": [
@@ -55,65 +55,65 @@
   },
   "changed": true,
   "validation": {
-    "default": 0.733,
-    "tuned": 0.803
+    "default": 0.729,
+    "tuned": 0.799
   },
   "test": {
     "default": {
-      "macroF1": 0.73,
+      "macroF1": 0.723,
       "per": {
         "halfspace": {
-          "tp": 266,
-          "fp": 212,
+          "tp": 250,
+          "fp": 229,
           "fn": 0,
-          "precision": 0.556,
+          "precision": 0.522,
           "recall": 1,
-          "f1": 0.715
+          "f1": 0.686
         },
         "overload": {
-          "tp": 1098,
-          "fp": 345,
-          "fn": 394,
-          "precision": 0.761,
-          "recall": 0.736,
-          "f1": 0.748
+          "tp": 1092,
+          "fp": 344,
+          "fn": 400,
+          "precision": 0.76,
+          "recall": 0.732,
+          "f1": 0.746
         },
         "press": {
-          "tp": 228,
+          "tp": 234,
           "fp": 0,
-          "fn": 171,
+          "fn": 166,
           "precision": 1,
-          "recall": 0.571,
-          "f1": 0.727
+          "recall": 0.585,
+          "f1": 0.738
         }
       }
     },
     "tuned": {
-      "macroF1": 0.805,
+      "macroF1": 0.794,
       "per": {
         "halfspace": {
-          "tp": 266,
-          "fp": 130,
+          "tp": 250,
+          "fp": 147,
           "fn": 0,
-          "precision": 0.672,
+          "precision": 0.63,
           "recall": 1,
-          "f1": 0.804
+          "f1": 0.773
         },
         "overload": {
-          "tp": 1199,
-          "fp": 194,
-          "fn": 293,
+          "tp": 1180,
+          "fp": 191,
+          "fn": 312,
           "precision": 0.861,
-          "recall": 0.804,
-          "f1": 0.831
+          "recall": 0.791,
+          "f1": 0.824
         },
         "press": {
-          "tp": 255,
+          "tp": 259,
           "fp": 0,
-          "fn": 144,
+          "fn": 141,
           "precision": 1,
-          "recall": 0.639,
-          "f1": 0.78
+          "recall": 0.648,
+          "f1": 0.786
         }
       }
     }
@@ -121,24 +121,24 @@
   "calibration": [
     {
       "range": "0–0.05",
-      "shots": 103,
-      "meanPredictedXg": 0.015,
-      "observedGoalRate": 0.01,
-      "gap": -0.006
+      "shots": 90,
+      "meanPredictedXg": 0.016,
+      "observedGoalRate": 0.011,
+      "gap": -0.005
     },
     {
       "range": "0.05–0.10",
-      "shots": 6,
-      "meanPredictedXg": 0.074,
+      "shots": 5,
+      "meanPredictedXg": 0.071,
       "observedGoalRate": 0,
-      "gap": -0.074
+      "gap": -0.071
     },
     {
       "range": "0.1–0.20",
-      "shots": 2,
-      "meanPredictedXg": 0.176,
+      "shots": 3,
+      "meanPredictedXg": 0.157,
       "observedGoalRate": 0,
-      "gap": -0.176
+      "gap": -0.157
     },
     {
       "range": "0.2–0.35",
@@ -152,64 +152,64 @@
     {
       "epoch": 0,
       "event": "baseline",
-      "validationMacroF1": 0.733
+      "validationMacroF1": 0.729
     },
     {
       "epoch": 1,
       "event": "accepted",
       "target": "halfspace",
       "edit": "halfspace.yLow: 14 -> 16",
-      "validationMacroF1": 0.75
+      "validationMacroF1": 0.746
     },
     {
       "epoch": 2,
       "event": "rejected",
       "target": "overload",
       "edit": "overload.radius: 10 -> 11",
-      "validationMacroF1": 0.728
+      "validationMacroF1": 0.725
     },
     {
       "epoch": 2,
       "event": "accepted",
       "target": "overload",
       "edit": "overload.radius: 10 -> 9",
-      "validationMacroF1": 0.768
+      "validationMacroF1": 0.763
     },
     {
       "epoch": 3,
       "event": "accepted",
       "target": "halfspace",
       "edit": "halfspace.yLow: 16 -> 18",
-      "validationMacroF1": 0.782
+      "validationMacroF1": 0.778
     },
     {
       "epoch": 4,
       "event": "rejected",
       "target": "press",
       "edit": "press.minProgress: 55 -> 58",
-      "validationMacroF1": 0.77
+      "validationMacroF1": 0.765
     },
     {
       "epoch": 4,
       "event": "accepted",
       "target": "press",
       "edit": "press.minProgress: 55 -> 52",
-      "validationMacroF1": 0.791
+      "validationMacroF1": 0.786
     },
     {
       "epoch": 5,
       "event": "rejected",
       "target": "overload",
       "edit": "overload.radius: 9 -> 10",
-      "validationMacroF1": 0.773
+      "validationMacroF1": 0.768
     },
     {
       "epoch": 5,
       "event": "accepted",
       "target": "overload",
       "edit": "overload.radius: 9 -> 8",
-      "validationMacroF1": 0.803
+      "validationMacroF1": 0.799
     }
   ],
-  "runtimeSeconds": 1.098
+  "runtimeSeconds": 1.107
 }

@@ -4,7 +4,7 @@ This is the deployable skill for MatchMind's tactics agent. It is plain Markdown
 The agent reads the `- key: value` lines below. Everything else is documentation.
 
 Written by `optimizer/skillopt.js`. Validation gate: held-out macro F1 must strictly improve.
-Validation macro F1: 0.733 (default) -> see optimizer/report.json for the final value.
+Validation macro F1: 0.729 (default) -> see optimizer/report.json for the final value.
 
 ## Intents
 

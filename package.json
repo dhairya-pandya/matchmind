@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "python3 -m http.server 8080",
     "optimize": "node optimizer/skillopt.js",
-    "test": "node adapters/test/run.js",
+    "test": "node tests/engine.js && node adapters/test/run.js",
     "fixture": "node adapters/test/make-fixture.js"
   },
   "engines": {

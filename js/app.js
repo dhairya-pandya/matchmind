@@ -148,7 +148,9 @@
       const text = el('span', 'moment-text');
       const title = ev.type === 'shot'
         ? `${ev.goal ? 'Goal' : 'Shot'} · ${match.players[ev.player].name}, xG ${ev.xg}`
-        : `High press · ${match.players[ev.tackler].name} wins it`;
+        : ev.type === 'sub'
+          ? `Sub · ${match.players[ev.player].name} on for ${match.players[ev.lost].name}`
+          : `High press · ${match.players[ev.tackler].name} wins it`;
       text.append(el('span', 'moment-title', title), el('span', 'moment-why', ev.why));
       btn.append(bar, min, text);
       btn.addEventListener('click', () => selectMoment(ev));

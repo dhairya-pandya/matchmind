@@ -15,7 +15,7 @@
   'use strict';
 
   const MM = global.MatchMind;
-  const { clamp, dist, round, pointSegDist } = MM.util;
+  const { clamp, dist, round, pointSegDist, isOn } = MM.util;
 
   // Defaults mirror skills/tactics.md. The skill file wins when it loads.
   const DEFAULT_SKILL = {
@@ -74,7 +74,7 @@
       const opp = squadOf(match, 1 - t);
       const prog = progress(ball[0], dir);
       const gain = ev.to ? (ev.to[0] - ev.from[0]) * dir : 0;
-      const cover = own.filter((id) => progress(pos[id][0], dir) < prog - 2).length;
+      const cover = own.filter((id) => isOn(pos[id]) && progress(pos[id][0], dir) < prog - 2).length;
 
       ev.feat = {
         zone: thirdOf(prog),
@@ -125,8 +125,9 @@
       if (ev.type === 'tackle') {
         const lostDir = match.teams[1 - ev.team].dir;
         const lostProg = progress(ev.from[0], lostDir);
+        const lostPos = match.snaps[ev.snap].pos;
         const lostCover = squadOf(match, 1 - ev.team)
-          .filter((id) => progress(match.snaps[ev.snap].pos[id][0], lostDir) < lostProg - 2).length;
+          .filter((id) => isOn(lostPos[id]) && progress(lostPos[id][0], lostDir) < lostProg - 2).length;
         if (lostProg >= 70 && lostCover <= 1) tags.push('lost in the final third with little cover');
       }
       if (f.progressive) tags.push('progressive');
@@ -225,6 +226,11 @@
   // ---------- Agent 4: narrator ----------
   function eventLine(match, ev) {
     const who = nameOf(match, ev.player);
+    if (ev.type === 'sub') {
+      const [a, b] = ev.score;
+      const state = a === b ? 'level' : (ev.team === 0) === (a > b) ? 'leading' : 'trailing';
+      return `${who} replaces ${nameOf(match, ev.lost)} (${match.teams[ev.team].name}, ${state} ${a}-${b}).`;
+    }
     if (ev.type === 'shot') {
       if (ev.goal) return `${who} scores from ${ev.dist} units out (xG ${ev.xg}).`;
       return `${who} shoots from ${ev.dist} units out (xG ${ev.xg}), ${ev.cone} defender(s) in the lane.`;
@@ -251,7 +257,23 @@
     return `Why it matters: ${ev.tags.join(', ')}. Phase: ${phaseOf(ev)}.`;
   }
 
+  // Descriptive only: the team's shots and xG in the 15 minutes before and after a change.
+  // It is not a causal estimate of the substitution's effect.
+  function subImpact(match, ev) {
+    const window = 15;
+    const sum = (lo, hi) => match.events
+      .filter((e) => e.team === ev.team && e.type === 'shot' && e.minute >= lo && e.minute < hi)
+      .reduce((acc, e) => ({ shots: acc.shots + 1, xg: acc.xg + e.xg }), { shots: 0, xg: 0 });
+    const before = sum(ev.minute - window, ev.minute);
+    const after = sum(ev.minute + 1, ev.minute + 1 + window);
+    return {
+      before: { shots: before.shots, xg: round(before.xg, 2) },
+      after: { shots: after.shots, xg: round(after.xg, 2) },
+    };
+  }
+
   function keyMomentScore(ev) {
+    if (ev.type === 'sub') return 0.05;
     if (ev.type === 'shot') return (ev.goal ? 1 : 0) + ev.xg + 0.02;
     if (ev.type === 'tackle' && ev.predicted && ev.predicted.press) return 0.04 + ev.pressure * 0.01;
     return 0;
@@ -260,12 +282,23 @@
   function narrator(match, state) {
     for (const ev of match.events) {
       ev.line = eventLine(match, ev);
-      ev.why = whyLine(ev);
+      if (ev.type === 'sub') {
+        ev.impact = subImpact(match, ev);
+        const b = ev.impact.before;
+        const a = ev.impact.after;
+        ev.why = `Shots and xG for ${match.teams[ev.team].name}: 15 minutes before, ${b.shots} shots (${b.xg} xG); ` +
+          `15 minutes after, ${a.shots} shots (${a.xg} xG). Descriptive, not a causal estimate.`;
+      } else {
+        ev.why = whyLine(ev);
+      }
     }
-    const moments = match.events
-      .filter((ev) => keyMomentScore(ev) > 0)
+    // Top 14 shots, presses and similar, plus every substitution so changes are never hidden.
+    const others = match.events
+      .filter((ev) => ev.type !== 'sub' && keyMomentScore(ev) > 0)
       .sort((a, b) => keyMomentScore(b) - keyMomentScore(a))
-      .slice(0, 14)
+      .slice(0, 14);
+    const subs = match.events.filter((ev) => ev.type === 'sub');
+    const moments = others.concat(subs)
       .sort((a, b) => a.minute - b.minute || a.n - b.n);
 
     const [home, away] = match.teams;

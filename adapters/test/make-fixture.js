@@ -32,8 +32,12 @@ const match = generateMatch(SEED, TOTAL);
 const events = [];
 const frames = {};
 const TYPE_NAME = { pass: 'Pass', carry: 'Carry', shot: 'Shot', tackle: 'Ball Recovery' };
+const { isOn } = globalThis.MatchMind.engine;
+const expected = [];
 
 match.events.forEach((ev, i) => {
+  // Substitutions have no StatsBomb pass/carry/shot equivalent in this fixture, so they are skipped.
+  if (ev.type === 'sub') return;
   const isAway = ev.team === 1;
   const teamSbId = ev.team === 0 ? HOME_ID : AWAY_ID;
   const id = `synthetic-${i}`;
@@ -57,13 +61,19 @@ match.events.forEach((ev, i) => {
   // Freeze frame: the event team's players first, then the opponents, all in that team's frame.
   const snap = match.snaps[ev.snap].pos;
   const frame = [];
-  for (const id2 of match.squad[ev.team]) frame.push({ location: toSb(snap[id2], isAway), teammate: true });
-  for (const id2 of match.squad[1 - ev.team]) frame.push({ location: toSb(snap[id2], isAway), teammate: false });
+  const mates = match.squad[ev.team].filter((id2) => isOn(snap[id2]));
+  const opps = match.squad[1 - ev.team].filter((id2) => isOn(snap[id2]));
+  for (const id2 of mates) frame.push({ location: toSb(snap[id2], isAway), teammate: true });
+  for (const id2 of opps) frame.push({ location: toSb(snap[id2], isAway), teammate: false });
+
+  // Expected positions in the adapter's numbering: side t * 11 + frame order.
+  const pos22 = new Array(22);
+  mates.forEach((id2, k) => { pos22[ev.team * 11 + k] = snap[id2]; });
+  opps.forEach((id2, k) => { pos22[(1 - ev.team) * 11 + k] = snap[id2]; });
+  expected.push({ pos: pos22, ball: ev.from });
   frames[id] = frame;
 });
 
-// Keep the expected absolute positions alongside, so the test can check the round trip.
-const expected = match.snaps.map((s, i) => ({ pos: s.pos, ball: match.events[i].from }));
 
 const out = {
   note: 'SYNTHETIC fixture generated from MatchMind. Not real match data.',

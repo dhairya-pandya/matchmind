@@ -219,6 +219,7 @@
         const b = s1.pos[i];
         const [X, Z] = toWorld([interp(a[0], b[0], f), interp(a[1], b[1], f)]);
         playerMeshes[i].position.set(X, 0.9, Z);
+        playerMeshes[i].visible = MM.engine.isOn(a) || MM.engine.isOn(b);
       }
       const bx = interp(s0.ball[0], s1.ball[0], f);
       const by = interp(s0.ball[1], s1.ball[1], f);
