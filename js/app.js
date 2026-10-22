@@ -135,8 +135,9 @@
     const list = $('#momentList');
     list.textContent = '';
     const { match, keyMoments } = app.state;
+    app.curation = {};
     keyMoments.forEach((ev) => {
-      const li = el('li');
+      const li = el('li', 'moment-row');
       const btn = el('button', 'moment');
       btn.type = 'button';
       btn.dataset.n = String(ev.n);
@@ -152,8 +153,58 @@
       btn.append(bar, min, text);
       btn.addEventListener('click', () => selectMoment(ev));
       li.appendChild(btn);
+      li.appendChild(curationControl(ev));
       list.appendChild(li);
     });
+    updateExportCount();
+  }
+
+  // Producer control: keep or drop a moment for the highlight package. Kept state is per session.
+  function curationControl(ev) {
+    const box = el('div', 'curate');
+    const keep = el('button', 'curate-btn', 'Keep');
+    const drop = el('button', 'curate-btn', 'Drop');
+    keep.type = drop.type = 'button';
+    const paint = () => {
+      const s = app.curation[ev.n];
+      keep.setAttribute('aria-pressed', String(s === 'keep'));
+      drop.setAttribute('aria-pressed', String(s === 'drop'));
+    };
+    keep.addEventListener('click', () => { app.curation[ev.n] = app.curation[ev.n] === 'keep' ? null : 'keep'; paint(); updateExportCount(); });
+    drop.addEventListener('click', () => { app.curation[ev.n] = app.curation[ev.n] === 'drop' ? null : 'drop'; paint(); updateExportCount(); });
+    box.append(keep, drop);
+    return box;
+  }
+
+  function updateExportCount() {
+    const kept = Object.values(app.curation).filter((v) => v === 'keep').length;
+    const btn = $('#exportBtn');
+    if (btn) btn.textContent = `Export ${kept} kept moment${kept === 1 ? '' : 's'}`;
+  }
+
+  // Exports kept moments as JSON for a highlight package. Model values are labelled as estimates.
+  function exportKept() {
+    const { match, keyMoments } = app.state;
+    const kept = keyMoments
+      .filter((ev) => app.curation[ev.n] === 'keep')
+      .map((ev) => ({
+        event: ev.n,
+        minute: ev.minute,
+        team: match.teams[ev.team].name,
+        type: ev.type,
+        line: ev.line,
+        why: ev.why,
+        xgEstimate: ev.xg,
+        note: 'Synthetic data. xG is a model estimate, not a betting or odds signal.',
+      }));
+    const blob = new Blob([JSON.stringify({ match: match.teams.map((t) => t.name), moments: kept }, null, 2)], { type: 'application/json' });
+    const a = el('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'matchmind-kept-moments.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
   function buildHeatPlayers() {
@@ -354,6 +405,8 @@
     $('#playBtn').addEventListener('click', () => (app.playing ? pause() : play()));
     $('#speed').addEventListener('change', (e) => { app.speed = Number(e.target.value); });
     $('#scrub').addEventListener('input', (e) => { pause(); setT(Number(e.target.value)); });
+
+    $('#exportBtn').addEventListener('click', exportKept);
 
     $('#heatTeam').addEventListener('change', () => { buildHeatPlayers(); drawAllCharts(); });
     $('#heatPlayer').addEventListener('change', drawAllCharts);

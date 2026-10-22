@@ -570,3 +570,23 @@ main {
 .calib-table th:first-child, .calib-table td:first-child { text-align: left; }
 .calib-table th { color: var(--chalk-2); font-weight: 500; }
 .calib .note { margin-top: var(--s2); }
+
+/* ---------- Producer curation ---------- */
+.moment-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--s2); border-top: 1px solid var(--line); }
+.moment-row:last-child { border-bottom: 1px solid var(--line); }
+.moment-row .moment { border-top: 0; }
+.curate { display: flex; gap: 4px; }
+.curate-btn {
+  font: inherit; font-size: var(--t-xs); font-weight: 600;
+  background: none; color: var(--chalk-2);
+  border: 1px solid var(--line-strong); border-radius: var(--r);
+  padding: 4px 8px; cursor: pointer;
+}
+.curate-btn:hover { color: var(--chalk); border-color: var(--chalk-2); }
+.curate-btn[aria-pressed="true"]:first-child { color: var(--ink); background: var(--signal); border-color: var(--signal); }
+.curate-btn[aria-pressed="true"]:last-child { color: var(--chalk); border-color: var(--alert); background: rgba(255, 92, 108, 0.12); }
+.btn-ghost {
+  background: none; color: var(--chalk); border: 1px solid var(--line-strong);
+  margin: var(--s3) 0 var(--s4);
+}
+.btn-ghost:hover { border-color: var(--chalk-2); background: var(--turf); }
