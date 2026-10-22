@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-10-22T18:29:27.459Z",
+  "method": "SkillOpt-style loop, heuristic reflect and edit, numeric parameters only",
+  "seeds": {
+    "train": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "validation": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108
+    ],
+    "test": [
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208
+    ]
+  },
+  "epochs": 5,
+  "editsPerEpoch": 2,
+  "defaultSkill": {
+    "halfspace.yLow": 14,
+    "halfspace.yHigh": 24,
+    "halfspace.minProgress": 70,
+    "overload.radius": 10,
+    "overload.minDiff": 2,
+    "press.minProgress": 55,
+    "press.minPressure": 2
+  },
+  "tunedSkill": {
+    "halfspace.yLow": 18,
+    "halfspace.yHigh": 24,
+    "halfspace.minProgress": 70,
+    "overload.radius": 8,
+    "overload.minDiff": 2,
+    "press.minProgress": 52,
+    "press.minPressure": 2
+  },
+  "changed": true,
+  "validation": {
+    "default": 0.733,
+    "tuned": 0.803
+  },
+  "test": {
+    "default": {
+      "macroF1": 0.73,
+      "per": {
+        "halfspace": {
+          "tp": 266,
+          "fp": 212,
+          "fn": 0,
+          "precision": 0.556,
+          "recall": 1,
+          "f1": 0.715
+        },
+        "overload": {
+          "tp": 1098,
+          "fp": 345,
+          "fn": 394,
+          "precision": 0.761,
+          "recall": 0.736,
+          "f1": 0.748
+        },
+        "press": {
+          "tp": 228,
+          "fp": 0,
+          "fn": 171,
+          "precision": 1,
+          "recall": 0.571,
+          "f1": 0.727
+        }
+      }
+    },
+    "tuned": {
+      "macroF1": 0.805,
+      "per": {
+        "halfspace": {
+          "tp": 266,
+          "fp": 130,
+          "fn": 0,
+          "precision": 0.672,
+          "recall": 1,
+          "f1": 0.804
+        },
+        "overload": {
+          "tp": 1199,
+          "fp": 194,
+          "fn": 293,
+          "precision": 0.861,
+          "recall": 0.804,
+          "f1": 0.831
+        },
+        "press": {
+          "tp": 255,
+          "fp": 0,
+          "fn": 144,
+          "precision": 1,
+          "recall": 0.639,
+          "f1": 0.78
+        }
+      }
+    }
+  },
+  "calibration": [
+    {
+      "range": "0–0.05",
+      "shots": 103,
+      "meanPredictedXg": 0.015,
+      "observedGoalRate": 0.01,
+      "gap": -0.006
+    },
+    {
+      "range": "0.05–0.10",
+      "shots": 6,
+      "meanPredictedXg": 0.074,
+      "observedGoalRate": 0,
+      "gap": -0.074
+    },
+    {
+      "range": "0.1–0.20",
+      "shots": 2,
+      "meanPredictedXg": 0.176,
+      "observedGoalRate": 0,
+      "gap": -0.176
+    },
+    {
+      "range": "0.2–0.35",
+      "shots": 1,
+      "meanPredictedXg": 0.235,
+      "observedGoalRate": 0,
+      "gap": -0.235
+    }
+  ],
+  "log": [
+    {
+      "epoch": 0,
+      "event": "baseline",
+      "validationMacroF1": 0.733
+    },
+    {
+      "epoch": 1,
+      "event": "accepted",
+      "target": "halfspace",
+      "edit": "halfspace.yLow: 14 -> 16",
+      "validationMacroF1": 0.75
+    },
+    {
+      "epoch": 2,
+      "event": "rejected",
+      "target": "overload",
+      "edit": "overload.radius: 10 -> 11",
+      "validationMacroF1": 0.728
+    },
+    {
+      "epoch": 2,
+      "event": "accepted",
+      "target": "overload",
+      "edit": "overload.radius: 10 -> 9",
+      "validationMacroF1": 0.768
+    },
+    {
+      "epoch": 3,
+      "event": "accepted",
+      "target": "halfspace",
+      "edit": "halfspace.yLow: 16 -> 18",
+      "validationMacroF1": 0.782
+    },
+    {
+      "epoch": 4,
+      "event": "rejected",
+      "target": "press",
+      "edit": "press.minProgress: 55 -> 58",
+      "validationMacroF1": 0.77
+    },
+    {
+      "epoch": 4,
+      "event": "accepted",
+      "target": "press",
+      "edit": "press.minProgress: 55 -> 52",
+      "validationMacroF1": 0.791
+    },
+    {
+      "epoch": 5,
+      "event": "rejected",
+      "target": "overload",
+      "edit": "overload.radius: 9 -> 10",
+      "validationMacroF1": 0.773
+    },
+    {
+      "epoch": 5,
+      "event": "accepted",
+      "target": "overload",
+      "edit": "overload.radius: 9 -> 8",
+      "validationMacroF1": 0.803
+    }
+  ],
+  "runtimeSeconds": 1.098
+}

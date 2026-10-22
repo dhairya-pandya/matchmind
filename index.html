@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MatchMind · Match intelligence</title>
+  <meta name="description" content="Explainable match intelligence from synthetic, football-realistic event data: tactical reasons, what-if counterfactuals, heatmaps and recaps.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="brand-name">MatchMind</span>
+    </div>
+    <div class="scoreline" id="scoreline" aria-live="polite"></div>
+    <div class="controls">
+      <label class="field">
+        <span>Match</span>
+        <select id="matchSelect"></select>
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage" aria-label="Match moment in 3D">
+      <div id="pitch3d" class="pitch3d"></div>
+      <div class="caption" aria-live="polite">
+        <p class="caption-meta" id="liveMeta"></p>
+        <p class="caption-line" id="liveLine"></p>
+        <p class="caption-why" id="liveWhy"></p>
+      </div>
+      <div class="scrubber">
+        <button class="btn btn-play" id="playBtn" type="button" aria-label="Play match">Play</button>
+        <div class="track">
+          <input type="range" id="scrub" min="0" max="100" step="0.01" value="0" aria-label="Match timeline">
+          <div class="ticks" id="ticks"></div>
+        </div>
+        <label class="field field-compact">
+          <span>Speed</span>
+          <select id="speed">
+            <option value="0.5">0.5x</option>
+            <option value="1" selected>1x</option>
+            <option value="2">2x</option>
+            <option value="4">4x</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Analysis panels">
+      <article class="panel moments">
+        <header class="panel-head">
+          <h2>Key moments</h2>
+          <p class="panel-sub">Shots, goals and high presses, with the tactical reason for each.</p>
+        </header>
+        <ol class="moment-list" id="momentList"></ol>
+        <dl class="glossary" aria-label="Glossary">
+          <div><dt>xG</dt><dd>Expected goals: the chance a shot scores, from distance and angle.</dd></div>
+          <div><dt>Half-space</dt><dd>The lane between the centre and the wing, where chances often start.</dd></div>
+          <div><dt>Overload</dt><dd>More teammates than opponents near the ball.</dd></div>
+          <div><dt>Press</dt><dd>Winning the ball high up with several players close by.</dd></div>
+          <div><dt>Phase</dt><dd>In possession, or out of possession and pressing.</dd></div>
+        </dl>
+      </article>
+
+      <article class="panel whatif">
+        <header class="panel-head">
+          <h2>What if</h2>
+          <p class="panel-sub" id="cfSub"></p>
+        </header>
+        <div class="cf-figure">
+          <canvas id="cfPitch" aria-label="Pitch showing the original and alternative positions" role="img"></canvas>
+          <p class="cf-legend">
+            <span class="key key-hollow"></span> original
+            <span class="key key-dot"></span> alternative
+            <span class="key key-cross"></span> shot origin
+          </p>
+        </div>
+        <ul class="cf-options" id="cfOptions"></ul>
+        <p class="note">Estimates from a transparent model on synthetic data, not football facts.</p>
+        <div id="calib" class="calib"></div>
+      </article>
+
+      <article class="panel side">
+        <section class="block">
+          <header class="panel-head">
+            <h2>Heatmap</h2>
+            <div class="filters">
+              <label class="field field-compact">
+                <span>Team</span>
+                <select id="heatTeam">
+                  <option value="">Both</option>
+                  <option value="0">Northbank FC</option>
+                  <option value="1">Riverside City</option>
+                </select>
+              </label>
+              <label class="field field-compact">
+                <span>Player</span>
+                <select id="heatPlayer"></select>
+              </label>
+            </div>
+          </header>
+          <canvas id="heat" class="heat-canvas" aria-label="Position heatmap"></canvas>
+        </section>
+        <section class="block">
+          <header class="panel-head">
+            <h2>Pressure faced</h2>
+            <p class="panel-sub">Defenders within 7 units of the ball, per minute.</p>
+          </header>
+          <canvas id="pressure" class="pressure-canvas" aria-label="Pressure timeline"></canvas>
+          <p class="legend-row">
+            <span class="swatch swatch-home"></span> Northbank
+            <span class="swatch swatch-away"></span> Riverside
+          </p>
+        </section>
+      </article>
+    </section>
+
+    <section class="recap" aria-labelledby="recapTitle">
+      <header class="panel-head">
+        <h2 id="recapTitle">Match recap</h2>
+      </header>
+      <div class="recap-body" id="recap"></div>
+    </section>
+
+    <section class="trace">
+      <details>
+        <summary>Agent trace</summary>
+        <ol id="trace" class="trace-list"></ol>
+      </details>
+    </section>
+  </main>
+
+  <script src="js/engine.js"></script>
+  <script src="js/agents.js"></script>
+  <script src="js/pitch.js"></script>
+  <script src="js/pitch3d.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "matchmind",
+  "version": "0.2.0",
+  "description": "Explainable football match intelligence on synthetic, football-realistic event data. Tactical reasons, what-if counterfactuals, 3D pitch, optimizer for the tactics skill.",
+  "private": true,
+  "scripts": {
+    "serve": "python3 -m http.server 8080",
+    "optimize": "node optimizer/skillopt.js",
+    "test": "node adapters/test/run.js",
+    "fixture": "node adapters/test/make-fixture.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
