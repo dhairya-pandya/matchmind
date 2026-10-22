@@ -65,11 +65,10 @@ The page needs internet access for Three.js and Google Fonts.
 
 ## Status and next
 
-Done: 3D pitch, key moments, what-if with calibration, substitutions, producer keep/drop and export, accessibility pass (text descriptions for every chart, lettered slots, dashed away line, keyboard orbit).
+Done: 3D pitch, key moments, what-if with calibration, substitutions, producer keep/drop and export, accessibility pass (text descriptions for every chart, lettered slots, dashed away line, keyboard orbit), recap claims that cite their events, and a copy check that blocks betting and win-probability language.
 
 Next, roughly in order:
 
-- Recap sentences that cite the event behind each claim.
-- A writer agent backed by a language model, with the heuristic as fallback.
-- Probability and betting framing kept strictly as information.
+- A writer agent backed by a language model, with the heuristic as fallback. Needs a model key.
 - A tracking-data adapter, once a licence is in place.
+- Player identity across events, so trails and heatmaps stay correct on real feeds.
