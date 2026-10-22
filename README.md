@@ -50,25 +50,3 @@ npm run optimize   # re-tune the tactics skill, about 2 seconds
 ```
 
 The page needs internet access for Three.js and Google Fonts.
-
-## Where things are
-
-| | |
-| --- | --- |
-| `js/` | Engine, agents, 3D pitch, charts, app |
-| `skills/tactics.md` | The thresholds the tactics agent reads |
-| `optimizer/` | Tunes the skill; writes the calibration report |
-| `adapters/` | StatsBomb-format adapter and its synthetic test |
-| `tests/` | Engine rules for squads and substitutions |
-| `docs/REAL-DATA.md` | Real-feed integration, limits and licences |
-| `docs/research/` | Research on viewing gaps and existing products |
-
-## Status and next
-
-Done: 3D pitch, key moments, what-if with calibration, substitutions, producer keep/drop and export, accessibility pass (text descriptions for every chart, lettered slots, dashed away line, keyboard orbit), recap claims that cite their events, and a copy check that blocks betting and win-probability language.
-
-Next, roughly in order:
-
-- A writer agent backed by a language model, with the heuristic as fallback. Needs a model key.
-- A tracking-data adapter, once a licence is in place.
-- Player identity: frame linking cuts slot swaps from 91% to 7% on synthetic frames. Real feeds still need tracking ids, or the swaps remain.
