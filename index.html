@@ -28,7 +28,8 @@
 
   <main>
     <section class="stage" aria-label="Match moment in 3D">
-      <div id="pitch3d" class="pitch3d"></div>
+      <div id="pitch3d" class="pitch3d" tabindex="0" role="application" aria-describedby="pitchHelp liveLine"></div>
+      <p id="pitchHelp" class="sr-only">3D pitch. Arrow keys rotate the view, plus and minus zoom. The current moment is described in the caption.</p>
       <div class="caption" aria-live="polite">
         <p class="caption-meta" id="liveMeta"></p>
         <p class="caption-line" id="liveLine"></p>
@@ -75,10 +76,11 @@
           <p class="panel-sub" id="cfSub"></p>
         </header>
         <div class="cf-figure">
-          <canvas id="cfPitch" aria-label="Pitch showing the original and alternative positions" role="img"></canvas>
+          <canvas id="cfPitch" role="img" aria-labelledby="cfDesc"></canvas>
+          <p class="chart-desc" id="cfDesc"></p>
           <p class="cf-legend">
-            <span class="key key-hollow"></span> original
-            <span class="key key-dot"></span> alternative
+            <span class="key key-hollow"></span> current position
+            <span class="key key-dot"></span> slot A to D (A is best)
             <span class="key key-cross"></span> shot origin
           </p>
         </div>
@@ -106,17 +108,20 @@
               </label>
             </div>
           </header>
-          <canvas id="heat" class="heat-canvas" aria-label="Position heatmap"></canvas>
+          <canvas id="heat" class="heat-canvas" role="img" aria-labelledby="heatDesc"></canvas>
+          <p class="chart-desc" id="heatDesc"></p>
+          <p class="legend-row"><span class="scale" aria-hidden="true"></span> less time &rarr; more time</p>
         </section>
         <section class="block">
           <header class="panel-head">
             <h2>Pressure faced</h2>
             <p class="panel-sub">Defenders within 7 units of the ball, per minute.</p>
           </header>
-          <canvas id="pressure" class="pressure-canvas" aria-label="Pressure timeline"></canvas>
+          <canvas id="pressure" class="pressure-canvas" role="img" aria-labelledby="pressureDesc"></canvas>
+          <p class="chart-desc" id="pressureDesc"></p>
           <p class="legend-row">
-            <span class="swatch swatch-home"></span> Northbank
-            <span class="swatch swatch-away"></span> Riverside
+            <span class="swatch swatch-home"></span> Northbank, solid
+            <span class="swatch swatch-away swatch-dashed"></span> Riverside, dashed
           </p>
         </section>
       </article>

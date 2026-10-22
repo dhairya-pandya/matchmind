@@ -176,6 +176,18 @@
       lastY = e.clientY;
     });
     el.addEventListener('pointerup', () => { dragging = false; });
+    // Keyboard: arrows rotate and tilt, plus and minus zoom. Works while the container has focus.
+    container.addEventListener('keydown', (e) => {
+      const step = 0.08;
+      if (e.key === 'ArrowLeft') theta += step;
+      else if (e.key === 'ArrowRight') theta -= step;
+      else if (e.key === 'ArrowUp') phi = clamp(phi - step, 0.35, 1.3);
+      else if (e.key === 'ArrowDown') phi = clamp(phi + step, 0.35, 1.3);
+      else if (e.key === '+' || e.key === '=') radius = clamp(radius - 6, 60, 210);
+      else if (e.key === '-') radius = clamp(radius + 6, 60, 210);
+      else return;
+      e.preventDefault();
+    });
 
     function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
 

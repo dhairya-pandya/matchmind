@@ -590,3 +590,20 @@ main {
   margin: var(--s3) 0 var(--s4);
 }
 .btn-ghost:hover { border-color: var(--chalk-2); background: var(--turf); }
+
+/* ---------- Accessibility ---------- */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.chart-desc { font-size: var(--t-xs); color: var(--chalk-2); margin-top: var(--s2); max-width: 60ch; }
+.scale {
+  display: inline-block; width: 64px; height: 8px; border-radius: 2px; vertical-align: 0;
+  background: linear-gradient(90deg, var(--turf), var(--signal));
+}
+.swatch-dashed { background: none; border-top: 3px dashed var(--away); height: 0; }
+#pitch3d:focus-visible, canvas:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.legend-row, .cf-legend { font-size: var(--t-xs); }
+.moment-team { font-weight: 600; font-size: var(--t-xs); color: var(--chalk-2); display: block; }
+.moment-team.home { color: var(--home); }
+.moment-team.away { color: var(--away); }

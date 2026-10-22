@@ -292,13 +292,15 @@
         ev.why = whyLine(ev);
       }
     }
-    // Top 14 shots, presses and similar, plus every substitution so changes are never hidden.
-    const others = match.events
-      .filter((ev) => ev.type !== 'sub' && keyMomentScore(ev) > 0)
-      .sort((a, b) => keyMomentScore(b) - keyMomentScore(a))
-      .slice(0, 14);
+    // Every shot and every substitution is a key moment. The strongest high presses fill the rest.
+    // A low-xG shot scores below a press, so shots are not ranked against presses.
+    const shots = match.events.filter((ev) => ev.type === 'shot');
     const subs = match.events.filter((ev) => ev.type === 'sub');
-    const moments = others.concat(subs)
+    const presses = match.events
+      .filter((ev) => ev.type === 'tackle' && keyMomentScore(ev) > 0)
+      .sort((a, b) => keyMomentScore(b) - keyMomentScore(a))
+      .slice(0, 8);
+    const moments = shots.concat(subs, presses)
       .sort((a, b) => a.minute - b.minute || a.n - b.n);
 
     const [home, away] = match.teams;

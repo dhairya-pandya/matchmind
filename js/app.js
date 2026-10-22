@@ -146,12 +146,13 @@
       const bar = el('span', 'moment-bar ' + (ev.team === 0 ? 'home' : 'away'));
       const min = el('span', 'moment-min', fmtMin(ev.minute));
       const text = el('span', 'moment-text');
+      const team = el('span', 'moment-team ' + (ev.team === 0 ? 'home' : 'away'), match.teams[ev.team].short);
       const title = ev.type === 'shot'
         ? `${ev.goal ? 'Goal' : 'Shot'} · ${match.players[ev.player].name}, xG ${ev.xg}`
         : ev.type === 'sub'
           ? `Sub · ${match.players[ev.player].name} on for ${match.players[ev.lost].name}`
           : `High press · ${match.players[ev.tackler].name} wins it`;
-      text.append(el('span', 'moment-title', title), el('span', 'moment-why', ev.why));
+      text.append(team, el('span', 'moment-title', title), el('span', 'moment-why', ev.why));
       btn.append(bar, min, text);
       btn.addEventListener('click', () => selectMoment(ev));
       li.appendChild(btn);
@@ -311,7 +312,7 @@
       `${fmtMin(cf.minute)} · ${shooterName} shoots at xG ${cf.baseline.xg}. ` +
       `What if ${moverName} had taken the chance from a different slot?`;
 
-    cf.options.forEach((o) => {
+    cf.options.forEach((o, i) => {
       const li = el('li', `cf-option verdict-${o.verdict}`);
       li.tabIndex = 0;
       li.dataset.key = o.key;
@@ -319,7 +320,7 @@
       li.setAttribute('aria-pressed', String(o.key === app.cfFocus));
       if (o.key === app.cfFocus) li.classList.add('is-focus');
 
-      const head = el('span', 'cf-option-head', `${o.label}`);
+      const head = el('span', 'cf-option-head', `${MM.charts.LETTERS[i]} · ${o.label}`);
       const num = el('span', 'cf-option-num', o.delta === 0 ? '0' : signed(o.delta));
       num.appendChild(el('small', null, `${o.verdict} · xG ${o.xg}`));
       const reasons = el('span', 'cf-option-reasons',
@@ -385,10 +386,14 @@
     MM.charts.drawHeat($('#heat'), match, heatTeamValue(), heatPlayerValue());
     MM.charts.drawPressure($('#pressure'), match, ev ? ev.minute : 1);
     drawCounterfactual();
+    // Text descriptions double as accessible names and visible captions.
+    $('#heatDesc').textContent = MM.charts.describeHeat(match, heatTeamValue(), heatPlayerValue());
+    $('#pressureDesc').textContent = MM.charts.describePressure(match);
   }
 
   function drawCounterfactual() {
     MM.charts.drawCounterfactual($('#cfPitch'), app.match, app.cf, app.cfFocus);
+    $('#cfDesc').textContent = MM.charts.describeCounterfactual(app.match, app.cf);
   }
 
   function heatTeamValue() {
