@@ -607,3 +607,13 @@ main {
 .moment-team { font-weight: 600; font-size: var(--t-xs); color: var(--chalk-2); display: block; }
 .moment-team.home { color: var(--home); }
 .moment-team.away { color: var(--away); }
+
+/* ---------- Recap evidence ---------- */
+.claim { margin: 0; }
+.claim-refs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 4px; font-size: var(--t-xs); color: var(--chalk-2); }
+.ref {
+  font: inherit; font-size: var(--t-xs); font-weight: 600; color: var(--signal);
+  background: none; border: 1px solid var(--line-strong); border-radius: var(--r);
+  padding: 1px 6px; cursor: pointer; font-variant-numeric: tabular-nums;
+}
+.ref:hover { border-color: var(--signal); }

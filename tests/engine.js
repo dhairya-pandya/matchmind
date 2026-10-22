@@ -53,6 +53,15 @@ for (const seed of [7, 21, 42]) {
   const subMoments = out.keyMoments.filter((e) => e.type === 'sub');
   assert.ok(subMoments.length > 0, `seed ${seed}: sub key moments`);
   assert.ok(subMoments.every((e) => e.impact && e.line.includes('replaces')), `seed ${seed}: sub text`);
+
+  // 6. Recap claims that contain numbers must cite events, and every cited event must exist.
+  for (const claim of out.recap) {
+    const hasNumber = /\d/.test(claim.text) && !/synthetic/.test(claim.text);
+    if (hasNumber) assert.ok(claim.refs.length > 0, `seed ${seed}: uncited claim "${claim.text.slice(0, 40)}"`);
+    for (const n of claim.refs) {
+      assert.ok(Number.isInteger(n) && match.events[n] && match.events[n].n === n, `seed ${seed}: bad ref ${n}`);
+    }
+  }
 }
 
 console.log('OK: engine squad rules and substitutions hold for seeds 7, 21, 42.');

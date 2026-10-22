@@ -313,29 +313,44 @@
       .filter((ev) => ev.type === 'tackle' && ev.predicted && ev.predicted.press)
       .sort((a, b) => b.pressure - a.pressure)[0];
 
-    const paragraphs = [
-      `${home.name} ${s0}-${s1} ${away.name}. ${home.name} had ${st0.possession}% of possession, ` +
-        `with ${st0.shots} shots and ${st0.xg} xG. ${away.name} had ${st1.shots} shots and ${st1.xg} xG.`,
+    // Each claim carries the event numbers it depends on, so the reader can check it.
+    const shotRefs = match.events.filter((ev) => ev.type === 'shot').map((ev) => ev.n);
+    const subRefs = subs.map((ev) => ev.n);
+    const claims = [
+      {
+        text: `${home.name} ${s0}-${s1} ${away.name}. ${home.name} had ${st0.possession}% of possession, ` +
+          `with ${st0.shots} shots and ${st0.xg} xG. ${away.name} had ${st1.shots} shots and ${st1.xg} xG.`,
+        refs: shotRefs,
+      },
     ];
     if (best) {
-      paragraphs.push(
-        `The clearest chance came in minute ${best.minute} (event ${best.n}): ${best.line} ` +
+      claims.push({
+        text: `The clearest chance came in minute ${best.minute}: ${best.line} ` +
           `${best.tags.length ? best.why : ''}`.trim(),
-      );
+        refs: [best.n],
+      });
     }
     if (press) {
-      paragraphs.push(
-        `The most aggressive press came in minute ${press.minute} (event ${press.n}), when ` +
+      claims.push({
+        text: `The most aggressive press came in minute ${press.minute}, when ` +
           `${nameOf(match, press.tackler)} won the ball with ${press.pressure} players close by.`,
-      );
+        refs: [press.n],
+      });
     }
-    paragraphs.push(
-      'All numbers come from synthetic, football-realistic events. The tactical reasons are rule-based ' +
+    if (subRefs.length) {
+      claims.push({
+        text: `${subRefs.length} substitutions were made, three per side, between minutes 60 and 75.`,
+        refs: subRefs,
+      });
+    }
+    claims.push({
+      text: 'All numbers come from synthetic, football-realistic events. The tactical reasons are rule-based ' +
         'with thresholds tuned on planted truth, and the what-if values are model estimates.',
-    );
+      refs: [],
+    });
 
     state.log('Narrator', `Wrote ${match.events.length} event lines, ${moments.length} key moments and a recap.`);
-    return { moments, recap: paragraphs };
+    return { moments, recap: claims };
   }
 
   // ---------- Orchestrator ----------

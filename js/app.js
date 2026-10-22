@@ -229,10 +229,29 @@
     });
   }
 
+  // Each recap sentence links to the events it relies on. A link jumps to that moment.
   function buildRecap() {
     const box = $('#recap');
     box.textContent = '';
-    app.state.recap.forEach((p) => box.appendChild(el('p', null, p)));
+    app.state.recap.forEach((claim) => {
+      const p = el('p', 'claim', claim.text);
+      if (claim.refs.length) {
+        const refs = el('span', 'claim-refs');
+        refs.appendChild(document.createTextNode('Evidence: '));
+        claim.refs.slice(0, 12).forEach((n) => {
+          const ev = app.match.events[n];
+          const b = el('button', 'ref', `${ev.minute}'`);
+          b.type = 'button';
+          b.title = `Event ${n}: ${ev.line}`;
+          b.setAttribute('aria-label', `Go to event ${n}, minute ${ev.minute}: ${ev.line}`);
+          b.addEventListener('click', () => selectMoment(ev, { scrollPanel: true }));
+          refs.appendChild(b);
+        });
+        if (claim.refs.length > 12) refs.appendChild(el('span', null, ` and ${claim.refs.length - 12} more`));
+        p.appendChild(refs);
+      }
+      box.appendChild(p);
+    });
   }
 
   // Calibration of the what-if shot model, from the optimizer's held-out test seeds.
