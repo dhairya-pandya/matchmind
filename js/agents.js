@@ -115,7 +115,8 @@
       if (ev.type === 'shot') {
         if (halfspace) tags.push('shot from a half-space');
         if (ev.cone >= 2) tags.push(`${ev.cone} defenders in the shooting lane`);
-        else if (ev.cone === 0) tags.push('clear shooting lane');
+        else if (ev.cone === 1) tags.push('1 defender in the shooting lane');
+        else tags.push('clear shooting lane');
       }
       if (halfspace && ev.type !== 'shot' && f.finalThird) tags.push('half-space entry');
       if (overloadOn) tags.push(`numerical overload +${overload}`);

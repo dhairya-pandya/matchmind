@@ -54,6 +54,11 @@ for (const seed of [7, 21, 42]) {
   assert.ok(subMoments.length > 0, `seed ${seed}: sub key moments`);
   assert.ok(subMoments.every((e) => e.impact && e.line.includes('replaces')), `seed ${seed}: sub text`);
 
+  // 5b. Every shot gets a tactical reason, never the routine-possession fallback.
+  for (const ev of out.keyMoments.filter((e) => e.type === 'shot')) {
+    assert.ok(!/Routine possession/.test(ev.why), `seed ${seed}: shot ${ev.n} has no tactical reason`);
+  }
+
   // 6. Recap claims that contain numbers must cite events, and every cited event must exist.
   for (const claim of out.recap) {
     const hasNumber = /\d/.test(claim.text) && !/synthetic/.test(claim.text);

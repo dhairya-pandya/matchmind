@@ -41,6 +41,15 @@
   // The skill and optimizer report are plain files. If they fail to load (for example
   // from file://), the agents fall back to their built-in defaults.
   let skillText = '';
+  // Three.js or WebGL can be unavailable (offline CDN, old browser). The panels still work without the 3D view.
+  function pitchFallback(err) {
+    const box = $('#pitch3d');
+    box.textContent = '';
+    const msg = el('p', 'pitch-fallback', '3D view unavailable. The panels below still show the match and the what-if.');
+    msg.setAttribute('role', 'status');
+    box.appendChild(msg);
+    console.warn('3D pitch not started:', err && err.message);
+  }
   let calibrationReport = null;
   async function loadAssets() {
     try { skillText = await (await fetch('skills/tactics.md')).text(); } catch (e) { skillText = ''; }
@@ -51,14 +60,22 @@
     app.match = MM.engine.generateMatch(seed);
     app.state = MM.agents.runPipeline(app.match, skillText);
     app.goalsBy = buildGoalIndex(app.match);
-    if (!app.pitch) {
-      app.pitch = MM.createPitch3D($('#pitch3d'), app.match);
+    if (!app.pitch && app.pitchFailed) {
+      // Already reported; keep the panels working.
+    } else if (!app.pitch) {
+      try {
+        app.pitch = MM.createPitch3D($('#pitch3d'), app.match);
+      } catch (err) {
+        app.pitchFailed = true;
+        pitchFallback(err);
+      }
     } else {
       app.pitch.setMatch(app.match);
     }
     buildScoreline();
     buildTicks();
     buildMoments();
+    currentMomentN = null;
     buildHeatPlayers();
     buildTrace();
     buildRecap();
@@ -373,17 +390,39 @@
     const max = app.match.events.length - 1;
     app.t = Math.min(max, Math.max(0, next));
     const n = Math.floor(app.t);
-    app.pitch.setView({
-      t: app.t,
-      selected: app.selected,
-      shotN: app.focusN,
-    });
+    if (app.pitch) {
+      app.pitch.setView({
+        t: app.t,
+        selected: app.selected,
+        shotN: app.focusN,
+      });
+    }
+    highlightCurrentMoment(n);
     $('#scrub').value = String(app.t);
     $('#playBtn').textContent = app.playing ? 'Pause' : 'Play';
     if (n !== app.liveIndex) {
       app.liveIndex = n;
       updateCaption(n);
     }
+  }
+
+  // Marks the key moment that playback has reached, so the list follows the match.
+  let currentMomentN = null;
+  function highlightCurrentMoment(n) {
+    const moments = app.state.keyMoments;
+    let cur = null;
+    for (const m of moments) {
+      if (m.snap <= n) cur = m.n;
+      else break;
+    }
+    if (cur === currentMomentN) return;
+    currentMomentN = cur;
+    document.querySelectorAll('.moment').forEach((b) => {
+      const on = Number(b.dataset.n) === cur;
+      b.classList.toggle('is-current', on);
+      if (on) b.setAttribute('aria-current', 'step');
+      else b.removeAttribute('aria-current');
+    });
   }
 
   function play() {
