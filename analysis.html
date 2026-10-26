@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2026-10-27">
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 </head>
 <body>
@@ -29,11 +29,13 @@
   <main>
     <section class="stage" aria-label="Match moment in 3D">
       <div id="pitch3d" class="pitch3d" tabindex="0" role="application" aria-describedby="pitchHelp liveLine"></div>
+      <div id="tags" class="tags" aria-hidden="true"></div>
       <p id="pitchHelp" class="sr-only">3D pitch. Arrow keys rotate the view, plus and minus zoom. The current moment is described in the caption.</p>
       <div class="caption" aria-live="polite">
         <p class="caption-meta" id="liveMeta"></p>
         <p class="caption-line" id="liveLine"></p>
         <p class="caption-why" id="liveWhy"></p>
+        <p class="caption-milestone" id="liveMilestone" aria-live="polite"></p>
       </div>
       <div class="scrubber">
         <button class="btn btn-play" id="playBtn" type="button" aria-label="Play match">Play</button>
@@ -144,6 +146,42 @@
       </article>
     </section>
 
+    <section class="personal block" aria-labelledby="personalTitle">
+      <header class="panel-head">
+        <h2 id="personalTitle">Your view</h2>
+        <p class="panel-sub">Pick a favourite club and player. Saved on this device only.</p>
+      </header>
+      <div class="filters">
+        <label class="field">
+          <span>Favourite club</span>
+          <select id="favClub">
+            <option value="">None</option>
+            <option value="0">Northbank FC</option>
+            <option value="1">Riverside City</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Favourite player</span>
+          <select id="favPlayer"></select>
+        </label>
+        <label class="field">
+          <span>Speed alert</span>
+          <select id="speedAlert">
+            <option value="0">Off</option>
+            <option value="4">4 m/s</option>
+            <option value="6" selected>6 m/s</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Narration</span>
+          <select id="lang">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
     <section class="recap" aria-labelledby="recapTitle">
       <header class="panel-head">
         <h2 id="recapTitle">Match recap</h2>
@@ -159,12 +197,12 @@
     </section>
   </main>
 
-  <script src="js/engine.js"></script>
-  <script src="js/agents.js"></script>
-  <script src="js/pitch.js"></script>
-  <script src="js/pitch3d.js"></script>
-  <script src="js/charts.js"></script>
-  <script src="js/feed.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/engine.js?v=2026-10-27"></script>
+  <script src="js/agents.js?v=2026-10-27"></script>
+  <script src="js/pitch.js?v=2026-10-27"></script>
+  <script src="js/pitch3d.js?v=2026-10-27"></script>
+  <script src="js/charts.js?v=2026-10-27"></script>
+  <script src="js/feed.js?v=2026-10-27"></script>
+  <script src="js/app.js?v=2026-10-27"></script>
 </body>
 </html>

@@ -34,6 +34,18 @@
       overlays.push(item);
     }
 
+    for (const m of state.milestones || []) {
+      overlays.push({
+        t: Math.round(m.n * secPerEvent),
+        minute: m.minute,
+        kind: 'milestone',
+        player: match.players[m.player].name,
+        text: m.text,
+        why: 'Milestone counted from the synthetic event stream.',
+        event: m.n,
+      });
+    }
+
     for (const w of state.windows) {
       overlays.push({
         t: Math.round(w.from * 60),

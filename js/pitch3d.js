@@ -191,9 +191,11 @@
 
     function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
 
+    let size = { w: 800, h: 500 };
     function resize() {
       const w = container.clientWidth || 800;
       const h = container.clientHeight || 500;
+      size = { w, h };
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
@@ -280,7 +282,27 @@
     global.addEventListener('resize', resize);
     requestAnimationFrame(frame);
 
+    // Screen position of each player for name tags. Off-pitch or behind the camera counts as hidden.
+    const tmp = new THREE.Vector3();
+    function project(ids) {
+      return ids.map((id) => {
+        const mesh = playerMeshes[id];
+        if (!mesh || !mesh.visible) return { id, x: 0, y: 0, visible: false };
+        tmp.copy(mesh.position);
+        tmp.y += 3.2;
+        tmp.project(camera);
+        const visible = tmp.z < 1 && Math.abs(tmp.x) < 1.1 && Math.abs(tmp.y) < 1.1;
+        return {
+          id,
+          x: ((tmp.x + 1) / 2) * size.w,
+          y: ((1 - tmp.y) / 2) * size.h,
+          visible,
+        };
+      });
+    }
+
     return {
+      project,
       setMatch(m) {
         match = m;
         rebuildPlayers();

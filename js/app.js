@@ -23,7 +23,37 @@
     cfFocus: null,
     liveIndex: -1,
     goalsBy: null,
+    prefs: {},
+    cum: null,
   };
+
+  // Narration language for event lines and milestones (the interface stays in English).
+  const lang = () => (app.prefs.lang === 'es' ? 'es' : 'en');
+
+  // Viewer preferences stay on this device. Storage can be blocked, so every access is guarded.
+  const PREFS_KEY = 'matchmind.prefs';
+  function loadPrefs() {
+    try { return JSON.parse(global.localStorage.getItem(PREFS_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function savePrefs() {
+    try { global.localStorage.setItem(PREFS_KEY, JSON.stringify(app.prefs)); } catch (e) { /* not saved */ }
+  }
+
+  // Cumulative metres per player at each event, for the distance indicator on name tags.
+  function buildCumulative(match) {
+    const secPerEvent = (90 * 60) / match.total;
+    const isOn = MM.engine.isOn;
+    const cum = match.players.map(() => new Float32Array(match.snaps.length));
+    for (let i = 1; i < match.snaps.length; i++) {
+      const a = match.snaps[i - 1].pos;
+      const b = match.snaps[i].pos;
+      match.players.forEach((p) => {
+        const add = isOn(a[p.id]) && isOn(b[p.id]) ? MM.util.dist(a[p.id], b[p.id]) : 0;
+        cum[p.id][i] = cum[p.id][i - 1] + add;
+      });
+    }
+    return { cum, secPerEvent };
+  }
 
   // ---------- Helpers ----------
   const el = (tag, cls, text) => {
@@ -60,6 +90,7 @@
     app.match = MM.engine.generateMatch(seed);
     app.state = MM.agents.runPipeline(app.match, skillText);
     app.goalsBy = buildGoalIndex(app.match);
+    app.cum = buildCumulative(app.match);
     if (!app.pitch && app.pitchFailed) {
       // Already reported; keep the panels working.
     } else if (!app.pitch) {
@@ -76,6 +107,7 @@
     buildTicks();
     app.curation = {};
     buildViewerControls();
+    buildPersonal();
     buildMoments();
     currentMomentN = null;
     buildHeatPlayers();
@@ -166,6 +198,9 @@
       const min = el('span', 'moment-min', fmtMin(ev.minute));
       const text = el('span', 'moment-text');
       const team = el('span', 'moment-team ' + (ev.team === 0 ? 'home' : 'away'), match.teams[ev.team].short);
+      if (app.prefs.favClub !== undefined && app.prefs.favClub !== '' && Number(app.prefs.favClub) === ev.team) {
+        team.appendChild(el('span', 'moment-fav', ' · favourite'));
+      }
       const title = ev.type === 'shot'
         ? `${ev.goal ? 'Goal' : 'Shot'} · ${match.players[ev.player].name}, xG ${ev.xg}`
         : ev.type === 'sub'
@@ -186,13 +221,34 @@
     const { keyMoments } = app.state;
     const mode = $('#viewMode').value;
     const player = Number($('#viewPlayer').value);
+    let list = keyMoments;
     if (mode === 'casual') {
-      return keyMoments.filter((ev) => ev.type === 'sub' || (ev.type === 'shot' && (ev.goal || ev.xg >= 0.05)));
+      list = keyMoments.filter((ev) => ev.type === 'sub' || (ev.type === 'shot' && (ev.goal || ev.xg >= 0.05)));
+    } else if (mode === 'player') {
+      list = keyMoments.filter((ev) => ev.player === player || ev.tackler === player || ev.lost === player);
     }
-    if (mode === 'player') {
-      return keyMoments.filter((ev) => ev.player === player || ev.tackler === player || ev.lost === player);
+    // Favourite club first, then match order. Sorting is stable, so minutes stay in order within each group.
+    const fav = app.prefs.favClub;
+    if (fav !== undefined && fav !== '') {
+      const favTeam = Number(fav);
+      list = list.slice().sort((a, b) => (a.team === favTeam ? 0 : 1) - (b.team === favTeam ? 0 : 1));
     }
-    return keyMoments;
+    return list;
+  }
+
+  function buildPersonal() {
+    const favPlayer = $('#favPlayer');
+    favPlayer.textContent = '';
+    favPlayer.appendChild(new Option('None', ''));
+    app.match.players.forEach((p) => favPlayer.appendChild(new Option(`${p.name} (${app.match.teams[p.team].short})`, String(p.id))));
+    $('#favClub').value = app.prefs.favClub ?? '';
+    favPlayer.value = app.prefs.favPlayer ?? '';
+    $('#speedAlert').value = app.prefs.speedAlert ?? '6';
+    $('#lang').value = lang();
+    if (app.prefs.favPlayer !== undefined && app.prefs.favPlayer !== '') {
+      $('#viewPlayer').value = app.prefs.favPlayer;
+      app.selected = Number(app.prefs.favPlayer);
+    }
   }
 
   function buildViewerControls() {
@@ -342,8 +398,11 @@
     const { match } = app;
     $('#liveMeta').textContent =
       `${fmtMin(ev.minute)} · ${teamName(match, ev.team)} · ${ev.type} · ${match.players[ev.player].name}`;
-    $('#liveLine').textContent = ev.line;
+    $('#liveLine').textContent = MM.agents.lineFor(match, ev, lang());
     $('#liveWhy').textContent = ev.why;
+    const recent = (app.state.milestones || []).filter((m) => m.n <= n && n - m.n < 10).pop();
+    const milestoneText = recent ? (lang() === 'es' ? recent.textEs : recent.text) : '';
+    $('#liveMilestone').textContent = milestoneText ? `${lang() === 'es' ? 'Hito' : 'Milestone'}: ${milestoneText}` : '';
     updateScoreline(n, ev.minute);
   }
 
@@ -435,12 +494,60 @@
       });
     }
     highlightCurrentMoment(n);
+    updateTags(n);
     $('#scrub').value = String(app.t);
     $('#playBtn').textContent = app.playing ? 'Pause' : 'Play';
     if (n !== app.liveIndex) {
       app.liveIndex = n;
       updateCaption(n);
     }
+  }
+
+  // Name tags on the pitch: the favourite player, the selected player and the current event's player.
+  // A speed alert appears when the average speed over one event window reaches the chosen threshold.
+  const tagNodes = new Map();
+  function trackedIds(n) {
+    const ids = [];
+    if (app.prefs.favPlayer !== undefined && app.prefs.favPlayer !== '') ids.push(Number(app.prefs.favPlayer));
+    ids.push(app.selected);
+    const ev = app.match.events[n];
+    if (ev && ev.player != null) ids.push(ev.player);
+    return [...new Set(ids)].slice(0, 4);
+  }
+
+  function updateTags(n) {
+    const box = $('#tags');
+    if (!app.pitch || !app.cum) { box.hidden = true; return; }
+    const ids = trackedIds(n);
+    const proj = app.pitch.project(ids);
+    const alert = Number(app.prefs.speedAlert ?? 6);
+    const { cum, secPerEvent } = app.cum;
+    const snaps = app.match.snaps;
+    for (const id of [...tagNodes.keys()]) {
+      if (!ids.includes(id)) { tagNodes.get(id).remove(); tagNodes.delete(id); }
+    }
+    proj.forEach((p) => {
+      const player = app.match.players[p.id];
+      let node = tagNodes.get(p.id);
+      if (!node) {
+        node = el('span', 'tag');
+        box.appendChild(node);
+        tagNodes.set(p.id, node);
+      }
+      node.hidden = !p.visible;
+      node.style.transform = `translate(${p.x}px, ${p.y}px) translate(-50%, -100%)`;
+      const a = n > 0 ? snaps[n - 1].pos[p.id] : null;
+      const b = snaps[n].pos[p.id];
+      const speed = a && MM.engine.isOn(a) && MM.engine.isOn(b) ? MM.util.dist(a, b) / secPerEvent : 0;
+      const fast = alert > 0 && speed >= alert;
+      node.classList.toggle('is-fast', fast);
+      node.classList.toggle('is-fav', String(p.id) === String(app.prefs.favPlayer));
+      node.textContent = player.name;
+      if (fast) {
+        node.appendChild(el('i', null, `${speed.toFixed(1)} m/s · ${Math.round(cum[p.id][n])} m`));
+      }
+    });
+    box.hidden = false;
   }
 
   // Marks the key moment that playback has reached, so the list follows the match.
@@ -508,6 +615,21 @@
     $('#speed').addEventListener('change', (e) => { app.speed = Number(e.target.value); });
     $('#scrub').addEventListener('input', (e) => { pause(); setT(Number(e.target.value)); });
 
+    app.prefs = loadPrefs();
+    $('#favClub').addEventListener('change', (e) => { app.prefs.favClub = e.target.value; savePrefs(); buildMoments(); });
+    $('#favPlayer').addEventListener('change', (e) => {
+      app.prefs.favPlayer = e.target.value;
+      savePrefs();
+      if (e.target.value !== '') { $('#viewPlayer').value = e.target.value; app.selected = Number(e.target.value); }
+      buildMoments();
+    });
+    $('#speedAlert').addEventListener('change', (e) => { app.prefs.speedAlert = e.target.value; savePrefs(); });
+    $('#lang').addEventListener('change', (e) => {
+      app.prefs.lang = e.target.value;
+      savePrefs();
+      app.liveIndex = -1;
+      setT(app.t);
+    });
     $('#exportBtn').addEventListener('click', exportKept);
     $('#feedBtn').addEventListener('click', downloadFeed);
     $('#viewMode').addEventListener('change', () => {

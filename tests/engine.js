@@ -69,4 +69,17 @@ for (const seed of [7, 21, 42]) {
   }
 }
 
+// 7. Every event type has an English and a Spanish line, and the Spanish line is not the English one.
+{
+  const match = generateMatch(7);
+  runPipeline(match, '');
+  const { lineFor } = MM.agents;
+  for (const ev of match.events) {
+    const en = lineFor(match, ev, 'en');
+    const es = lineFor(match, ev, 'es');
+    assert.ok(en && es, `event ${ev.n}: missing line`);
+    assert.notStrictEqual(en, es, `event ${ev.n}: Spanish line equals English`);
+  }
+}
+
 console.log('OK: engine squad rules and substitutions hold for seeds 7, 21, 42.');

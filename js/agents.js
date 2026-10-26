@@ -233,27 +233,60 @@
   }
 
   // ---------- Agent 4: narrator ----------
-  function eventLine(match, ev) {
+  // Narration languages. Only event lines and milestones are translated; the interface stays in English.
+  const LANGS = ['en', 'es'];
+  const TEXT = {
+    en: {
+      scores: (who, d, xg) => `${who} scores from ${d} units out (xG ${xg}).`,
+      shoots: (who, d, xg, c) => `${who} shoots from ${d} units out (xG ${xg}), ${c} defender(s) in the lane.`,
+      progressive: (who, to) => `${who} plays a progressive pass to ${to}.`,
+      keeps: (who, to) => `${who} keeps it moving to ${to}.`,
+      carry: (who, g) => `${who} carries the ball ${g} units forward.`,
+      wins: (winner, lost, high) => `${winner} wins it from ${lost}${high ? ' high up the pitch' : ''}.`,
+      sub: (who, off, team, state, a, b) => `${who} replaces ${off} (${team}, ${state} ${a}-${b}).`,
+      level: 'level', leading: 'leading', trailing: 'trailing',
+      firstGoal: (name) => `${name} scores the first goal of the match.`,
+      nthGoal: (name, n) => `${name} scores their ${n} goal of the match.`,
+      nthPass: (name, n) => `${name} completes their ${n} pass of the match.`,
+    },
+    es: {
+      scores: (who, d, xg) => `${who} marca desde ${d} metros (xG ${xg}).`,
+      shoots: (who, d, xg, c) => `${who} dispara desde ${d} metros (xG ${xg}), con ${c} defensor(es) en la trayectoria.`,
+      progressive: (who, to) => `${who} hace un pase progresivo a ${to}.`,
+      keeps: (who, to) => `${who} mantiene el balón con ${to}.`,
+      carry: (who, g) => `${who} conduce el balón ${g} metros hacia adelante.`,
+      wins: (winner, lost, high) => `${winner} le roba el balón a ${lost}${high ? ' en campo rival' : ''}.`,
+      sub: (who, off, team, state, a, b) => `${who} entra por ${off} (${team}, ${state} ${a}-${b}).`,
+      level: 'empate', leading: 'ganando', trailing: 'perdiendo',
+      firstGoal: (name) => `${name} marca el primer gol del partido.`,
+      nthGoal: (name, n) => `${name} marca su gol número ${n} del partido.`,
+      nthPass: (name, n) => `${name} completa su pase número ${n} del partido.`,
+    },
+  };
+
+  function eventLine(match, ev, lang = 'en') {
+    const T = TEXT[lang] || TEXT.en;
     const who = nameOf(match, ev.player);
     if (ev.type === 'sub') {
       const [a, b] = ev.score;
-      const state = a === b ? 'level' : (ev.team === 0) === (a > b) ? 'leading' : 'trailing';
-      return `${who} replaces ${nameOf(match, ev.lost)} (${match.teams[ev.team].name}, ${state} ${a}-${b}).`;
+      const state = a === b ? T.level : (ev.team === 0) === (a > b) ? T.leading : T.trailing;
+      return T.sub(who, nameOf(match, ev.lost), match.teams[ev.team].name, state, a, b);
     }
     if (ev.type === 'shot') {
-      if (ev.goal) return `${who} scores from ${ev.dist} units out (xG ${ev.xg}).`;
-      return `${who} shoots from ${ev.dist} units out (xG ${ev.xg}), ${ev.cone} defender(s) in the lane.`;
+      if (ev.goal) return T.scores(who, ev.dist, ev.xg);
+      return T.shoots(who, ev.dist, ev.xg, ev.cone);
     }
     if (ev.type === 'pass') {
       const to = nameOf(match, ev.receiver);
-      return ev.feat.progressive
-        ? `${who} plays a progressive pass to ${to}.`
-        : `${who} keeps it moving to ${to}.`;
+      return ev.feat.progressive ? T.progressive(who, to) : T.keeps(who, to);
     }
-    if (ev.type === 'carry') return `${who} carries the ball ${round(ev.feat.gain, 0)} units forward.`;
-    const winner = nameOf(match, ev.tackler);
-    const lost = nameOf(match, ev.lost);
-    return `${winner} wins it from ${lost}${ev.predicted && ev.predicted.press ? ' high up the pitch' : ''}.`;
+    if (ev.type === 'carry') return T.carry(who, round(ev.feat.gain, 0));
+    return T.wins(nameOf(match, ev.tackler), nameOf(match, ev.lost), !!(ev.predicted && ev.predicted.press));
+  }
+
+  // Line for a given language. Used by the UI, so the caption can switch without rerunning the pipeline.
+  function lineFor(match, ev, lang) {
+    return eventLine(match, ev, lang);
   }
 
   // Shape phase from the reader's side: the team in possession is "in possession".
@@ -290,7 +323,7 @@
 
   function narrator(match, state) {
     for (const ev of match.events) {
-      ev.line = eventLine(match, ev);
+      ev.line = eventLine(match, ev, 'en');
       if (ev.type === 'sub') {
         ev.impact = subImpact(match, ev);
         const b = ev.impact.before;
@@ -346,6 +379,18 @@
         refs: [press.n],
       });
     }
+    // Player performance: the most-passing and most-distance players, with the events behind them.
+    const perf = state.playerStats || [];
+    if (perf.length) {
+      const topPasser = perf.slice().sort((a, b) => b.passes - a.passes)[0];
+      const topRunner = perf.slice().sort((a, b) => b.distance - a.distance)[0];
+      const refsOf = (id, type) => match.events.filter((e) => e.player === id && e.type === type).map((e) => e.n);
+      claims.push({
+        text: `${topPasser.name} made the most passes, ${topPasser.passes}. ` +
+          `${topRunner.name} covered the most ground, about ${topRunner.distance} metres.`,
+        refs: refsOf(topPasser.id, 'pass').slice(0, 12).concat(refsOf(topRunner.id, 'carry').slice(0, 4)),
+      });
+    }
     if (subRefs.length) {
       claims.push({
         text: `${subRefs.length} substitutions were made, three per side, between minutes 60 and 75.`,
@@ -380,6 +425,63 @@
     return out;
   }
 
+  // ---------- Player performance and milestones ----------
+  // Distance is the sum of movement between consecutive snapshots, on pitch only.
+  // Speed is the average over one event window, not a peak: events are about six seconds apart.
+  const MILESTONE_PASSES = [10, 25, 50];
+  const ordinal = (n) => ({ 1: 'first', 2: 'second', 3: 'third' }[n] || `${n}th`);
+
+  function playerPerformance(match, state) {
+    const secPerEvent = (90 * 60) / match.total;
+    const stats = match.players.map((p) => ({
+      id: p.id, name: p.name, team: p.team, passes: 0, shots: 0, goals: 0, tackles: 0,
+      distance: 0, maxWindowSpeed: 0,
+    }));
+    for (let i = 1; i < match.snaps.length; i++) {
+      const a = match.snaps[i - 1].pos;
+      const b = match.snaps[i].pos;
+      for (const s of stats) {
+        if (!isOn(a[s.id]) || !isOn(b[s.id])) continue;
+        const d = dist(a[s.id], b[s.id]);
+        s.distance += d;
+        s.maxWindowSpeed = Math.max(s.maxWindowSpeed, d / secPerEvent);
+      }
+    }
+    const milestones = [];
+    for (const ev of match.events) {
+      const actor = stats[ev.player];
+      if (!actor || ev.type === 'sub') continue;
+      if (ev.type === 'pass') {
+        actor.passes++;
+        if (MILESTONE_PASSES.includes(actor.passes)) {
+          milestones.push({ n: ev.n, minute: ev.minute, player: actor.id,
+            text: `${actor.name} completes their ${ordinal(actor.passes)} pass of the match.`,
+            textEs: `${actor.name} completa su pase número ${actor.passes} del partido.` });
+        }
+      }
+      if (ev.type === 'shot') {
+        actor.shots++;
+        if (actor.shots === 1) milestones.push({ n: ev.n, minute: ev.minute, player: actor.id,
+          text: `${actor.name} takes the first shot of the match for ${match.teams[ev.team].name}.`,
+          textEs: `${actor.name} lanza el primer tiro del partido para ${match.teams[ev.team].name}.` });
+        if (ev.goal) {
+          actor.goals++;
+          milestones.push({ n: ev.n, minute: ev.minute, player: actor.id,
+            text: actor.goals === 1
+              ? `${actor.name} scores the first goal of the match.`
+              : `${actor.name} scores their ${ordinal(actor.goals)} goal of the match.`,
+            textEs: actor.goals === 1
+              ? `${actor.name} marca el primer gol del partido.`
+              : `${actor.name} marca su gol número ${actor.goals} del partido.` });
+        }
+      }
+      if (ev.type === 'tackle') stats[ev.tackler].tackles++;
+    }
+    for (const s of stats) s.distance = round(s.distance, 0);
+    for (const s of stats) s.maxWindowSpeed = round(s.maxWindowSpeed, 1);
+    return { stats, milestones };
+  }
+
   // ---------- Orchestrator ----------
   function runPipeline(match, skillText) {
     const trace = [];
@@ -393,13 +495,15 @@
     eventDetector(match, state);
     tactics(match, state, skill);
     const cfs = counterfactualAgent(match, state);
-    const { moments, recap } = narrator(match, state);
     const windows = windowsOf(match);
+    const perf = playerPerformance(match, state);
+    state.playerStats = perf.stats;
+    const { moments, recap } = narrator(match, state);
     state.log('Control', `Labelled ${windows.length} ten-minute windows as controlled, even or chaotic.`);
 
     state.log('Orchestrator', 'Pipeline complete. Shared state is ready for the UI.');
-    return { match, keyMoments: moments, cfs, recap, trace, skill, windows };
+    return { match, keyMoments: moments, cfs, recap, trace, skill, windows, playerStats: perf.stats, milestones: perf.milestones };
   }
 
-  MM.agents = { runPipeline, counterfactual, parseSkill, DEFAULT_SKILL, SKILL_SPACE };
+  MM.agents = { runPipeline, counterfactual, parseSkill, DEFAULT_SKILL, SKILL_SPACE, lineFor, LANGS, TEXT };
 })(typeof window !== 'undefined' ? window : globalThis);

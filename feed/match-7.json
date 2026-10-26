@@ -32,6 +32,15 @@
       "xg": 0.011
     },
     {
+      "t": 36,
+      "minute": 1,
+      "kind": "milestone",
+      "player": "Sorensen",
+      "text": "Sorensen takes the first shot of the match for Riverside City.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 6
+    },
+    {
       "t": 276,
       "minute": 5,
       "kind": "press",
@@ -70,6 +79,60 @@
       "event": 102
     },
     {
+      "t": 744,
+      "minute": 13,
+      "kind": "milestone",
+      "player": "Ashdown",
+      "text": "Ashdown completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 124
+    },
+    {
+      "t": 780,
+      "minute": 13,
+      "kind": "milestone",
+      "player": "Quill",
+      "text": "Quill completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 130
+    },
+    {
+      "t": 840,
+      "minute": 15,
+      "kind": "milestone",
+      "player": "Ruiz",
+      "text": "Ruiz completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 140
+    },
+    {
+      "t": 984,
+      "minute": 17,
+      "kind": "milestone",
+      "player": "Nakamura",
+      "text": "Nakamura completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 164
+    },
+    {
+      "t": 1062,
+      "minute": 18,
+      "kind": "milestone",
+      "player": "Sorensen",
+      "text": "Sorensen completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 177
+    },
+    {
+      "t": 1164,
+      "minute": 20,
+      "kind": "milestone",
+      "player": "Quade",
+      "text": "Quade completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 194
+    },
+    {
       "t": 1200,
       "minute": 20,
       "kind": "window",
@@ -88,12 +151,48 @@
       "event": 212
     },
     {
+      "t": 1356,
+      "minute": 23,
+      "kind": "milestone",
+      "player": "Lamb",
+      "text": "Lamb completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 226
+    },
+    {
+      "t": 1404,
+      "minute": 24,
+      "kind": "milestone",
+      "player": "Holt",
+      "text": "Holt completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 234
+    },
+    {
+      "t": 1536,
+      "minute": 26,
+      "kind": "milestone",
+      "player": "Varga",
+      "text": "Varga completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 256
+    },
+    {
       "t": 1800,
       "minute": 30,
       "kind": "window",
       "text": "Minutes 30 to 40: even phase, 18% of possession changes hands.",
       "why": "Control share is passes and carries; chaos is tackles that change hands.",
       "event": null
+    },
+    {
+      "t": 1896,
+      "minute": 32,
+      "kind": "milestone",
+      "player": "Delgado",
+      "text": "Delgado completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 316
     },
     {
       "t": 1920,
@@ -105,6 +204,15 @@
       "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane. Phase: in possession.",
       "event": 320,
       "xg": 0.039
+    },
+    {
+      "t": 1920,
+      "minute": 33,
+      "kind": "milestone",
+      "player": "Brennan",
+      "text": "Brennan takes the first shot of the match for Northbank FC.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 320
     },
     {
       "t": 2400,
@@ -125,6 +233,51 @@
       "event": 405
     },
     {
+      "t": 2460,
+      "minute": 42,
+      "kind": "milestone",
+      "player": "Quill",
+      "text": "Quill completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 410
+    },
+    {
+      "t": 2520,
+      "minute": 43,
+      "kind": "milestone",
+      "player": "Pennock",
+      "text": "Pennock completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 420
+    },
+    {
+      "t": 2526,
+      "minute": 43,
+      "kind": "milestone",
+      "player": "Sorensen",
+      "text": "Sorensen completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 421
+    },
+    {
+      "t": 2568,
+      "minute": 43,
+      "kind": "milestone",
+      "player": "Ferraro",
+      "text": "Ferraro completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 428
+    },
+    {
+      "t": 2652,
+      "minute": 45,
+      "kind": "milestone",
+      "player": "Nakamura",
+      "text": "Nakamura completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 442
+    },
+    {
       "t": 2748,
       "minute": 46,
       "kind": "shot",
@@ -134,6 +287,24 @@
       "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane, outnumbered by 2. Phase: in possession.",
       "event": 458,
       "xg": 0.012
+    },
+    {
+      "t": 2748,
+      "minute": 46,
+      "kind": "milestone",
+      "player": "Ruiz",
+      "text": "Ruiz takes the first shot of the match for Northbank FC.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 458
+    },
+    {
+      "t": 2760,
+      "minute": 47,
+      "kind": "milestone",
+      "player": "Quade",
+      "text": "Quade completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 460
     },
     {
       "t": 2790,
@@ -157,12 +328,30 @@
       "xg": 0.014
     },
     {
+      "t": 2946,
+      "minute": 50,
+      "kind": "milestone",
+      "player": "Holt",
+      "text": "Holt completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 491
+    },
+    {
       "t": 3000,
       "minute": 50,
       "kind": "window",
       "text": "Minutes 50 to 60: even phase, 16% of possession changes hands.",
       "why": "Control share is passes and carries; chaos is tackles that change hands.",
       "event": null
+    },
+    {
+      "t": 3048,
+      "minute": 51,
+      "kind": "milestone",
+      "player": "Ashdown",
+      "text": "Ashdown completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 508
     },
     {
       "t": 3066,
@@ -186,6 +375,15 @@
       "xg": 0.02
     },
     {
+      "t": 3186,
+      "minute": 54,
+      "kind": "milestone",
+      "player": "Quade",
+      "text": "Quade takes the first shot of the match for Riverside City.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 531
+    },
+    {
       "t": 3210,
       "minute": 54,
       "kind": "shot",
@@ -197,6 +395,24 @@
       "xg": 0.02
     },
     {
+      "t": 3210,
+      "minute": 54,
+      "kind": "milestone",
+      "player": "Pennock",
+      "text": "Pennock takes the first shot of the match for Riverside City.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 535
+    },
+    {
+      "t": 3222,
+      "minute": 54,
+      "kind": "milestone",
+      "player": "Varga",
+      "text": "Varga completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 537
+    },
+    {
       "t": 3324,
       "minute": 56,
       "kind": "press",
@@ -205,6 +421,15 @@
       "text": "Ashdown wins it from Sorensen high up the pitch.",
       "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
       "event": 554
+    },
+    {
+      "t": 3414,
+      "minute": 57,
+      "kind": "milestone",
+      "player": "Lamb",
+      "text": "Lamb completes their 25th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 569
     },
     {
       "t": 3480,
@@ -275,6 +500,24 @@
       "event": 630
     },
     {
+      "t": 4146,
+      "minute": 70,
+      "kind": "milestone",
+      "player": "Lindqvist",
+      "text": "Lindqvist completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 691
+    },
+    {
+      "t": 4176,
+      "minute": 70,
+      "kind": "milestone",
+      "player": "Aziz",
+      "text": "Aziz completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 696
+    },
+    {
       "t": 4200,
       "minute": 70,
       "kind": "window",
@@ -283,12 +526,66 @@
       "event": null
     },
     {
+      "t": 4524,
+      "minute": 76,
+      "kind": "milestone",
+      "player": "Marsh",
+      "text": "Marsh completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 754
+    },
+    {
+      "t": 4608,
+      "minute": 77,
+      "kind": "milestone",
+      "player": "Ibe",
+      "text": "Ibe completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 768
+    },
+    {
+      "t": 4692,
+      "minute": 79,
+      "kind": "milestone",
+      "player": "Holt",
+      "text": "Holt completes their 50th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 782
+    },
+    {
+      "t": 4770,
+      "minute": 80,
+      "kind": "milestone",
+      "player": "Lane",
+      "text": "Lane completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 795
+    },
+    {
       "t": 4800,
       "minute": 80,
       "kind": "window",
       "text": "Minutes 80 to 90: even phase, 18% of possession changes hands.",
       "why": "Control share is passes and carries; chaos is tackles that change hands.",
       "event": null
+    },
+    {
+      "t": 5124,
+      "minute": 86,
+      "kind": "milestone",
+      "player": "Pryce",
+      "text": "Pryce completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 854
+    },
+    {
+      "t": 5370,
+      "minute": 90,
+      "kind": "milestone",
+      "player": "Osei",
+      "text": "Osei completes their 10th pass of the match.",
+      "why": "Milestone counted from the synthetic event stream.",
+      "event": 895
     }
   ]
 }

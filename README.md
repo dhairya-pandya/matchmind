@@ -53,17 +53,18 @@ The page needs internet access for Three.js and Google Fonts.
 
 ## For judges
 
-- **Real:** the analysis runs in the browser. Tactical labels, what-if ranking, control windows, pass quality and ball speed are computed from the events and positions in the page.
+- **Real:** the analysis runs in the browser. Tactical labels, what-if ranking, control windows, pass quality, ball speed, player distance and milestones are computed from the events and positions in the page.
+- **Personal:** a favourite club and favourite player (saved on this device only), name tags on the 3D pitch with a speed and distance alert, and a narration language switch (English or Spanish, for event lines and milestones).
 - **Synthetic:** every match comes from a seed. No real Premier League data is used or shipped. Outputs in `feed/` and `data/` are generated from the same seeds.
+- **Limits:** speeds are movement between synthetic snapshots, not measured sprints. The interface labels, the reasons on each moment and the recap stay in English.
 - **Planned, not built:** a language-model writer, Azure and Microsoft Foundry hosting, auto-eventing from video, and tracking-data feeds. These need keys, a subscription or a licence.
 
 ## Outputs
 
-- `feed/match-<seed>.json`: timed overlays (key moments, substitutions, control windows) for a broadcast renderer. Times are seconds from kickoff.
+- `feed/match-<seed>.json`: timed overlays (key moments, substitutions, milestones, control windows) for a broadcast renderer. Times are seconds from kickoff.
 - `data/events-<seed>.csv`: every event with position, xG, pressure, pass distance, difficulty and speed.
 - Regenerate with `node scripts/export.js`.
 
 ## Viewer modes
 
 Analyst shows every key moment. Casual shows goals, big chances and substitutions. Player focus shows the moments one player is involved in.
-
