@@ -11,7 +11,7 @@ const path = require('path');
 
 const root = path.join(__dirname, '..');
 const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
-const sources = ['index.html', 'js/app.js', 'js/agents.js', 'js/charts.js', 'js/pitch3d.js'];
+const sources = ['index.html', 'analysis.html', 'js/app.js', 'js/agents.js', 'js/charts.js', 'js/pitch3d.js'];
 
 // Terms that turn an estimate into advice. Disclaimers may name "betting" or "odds" only in negation.
 const banned = [/\btips?\b/i, /\bwin(ning)? probability\b/i, /\bchance of (winning|scoring a goal)\b/i,
@@ -25,7 +25,7 @@ for (const f of sources) {
 }
 
 // Every surface that shows or exports xG carries the model-estimate disclaimer.
-assert.match(read('index.html'), /model estimate[^<]*not a betting or odds signal/i, 'glossary disclaimer');
+assert.match(read('analysis.html'), /model estimate[^<]*not a betting or odds signal/i, 'glossary disclaimer');
 assert.match(read('js/app.js'), /xG is a model estimate, not a betting or odds signal/, 'export disclaimer');
 
 console.log('OK: no betting, odds or win-probability copy; xG disclaimers present.');

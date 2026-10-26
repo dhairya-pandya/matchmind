@@ -3,150 +3,138 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MatchMind · Match intelligence</title>
-  <meta name="description" content="Explainable match intelligence from synthetic, football-realistic event data: tactical reasons, what-if counterfactuals, heatmaps and recaps.">
+  <title>MatchMind · Football, explained</title>
+  <meta name="description" content="MatchMind explains football matches: the tactical reason behind each key moment, what-if tests, and recaps that cite their evidence. Built on synthetic data.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 </head>
-<body>
+<body class="landing">
   <header class="topbar">
-    <div class="brand">
+    <a class="brand" href="index.html" aria-label="MatchMind overview">
       <span class="mark" aria-hidden="true"></span>
       <span class="brand-name">MatchMind</span>
-    </div>
-    <div class="scoreline" id="scoreline" aria-live="polite"></div>
-    <div class="controls">
-      <label class="field">
-        <span>Match</span>
-        <select id="matchSelect"></select>
-      </label>
-    </div>
+    </a>
+    <nav class="topnav" aria-label="Main">
+      <a href="#gap">Why</a>
+      <a href="#flow">How</a>
+      <a href="#users">Who</a>
+      <a class="btn btn-small" href="analysis.html">Open the analysis</a>
+    </nav>
   </header>
 
-  <main>
-    <section class="stage" aria-label="Match moment in 3D">
-      <div id="pitch3d" class="pitch3d" tabindex="0" role="application" aria-describedby="pitchHelp liveLine"></div>
-      <p id="pitchHelp" class="sr-only">3D pitch. Arrow keys rotate the view, plus and minus zoom. The current moment is described in the caption.</p>
-      <div class="caption" aria-live="polite">
-        <p class="caption-meta" id="liveMeta"></p>
-        <p class="caption-line" id="liveLine"></p>
-        <p class="caption-why" id="liveWhy"></p>
-      </div>
-      <div class="scrubber">
-        <button class="btn btn-play" id="playBtn" type="button" aria-label="Play match">Play</button>
-        <div class="track">
-          <input type="range" id="scrub" min="0" max="100" step="0.01" value="0" aria-label="Match timeline">
-          <div class="ticks" id="ticks"></div>
+  <main class="landing-main">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <h1 id="heroTitle">Football, explained.</h1>
+        <p class="lede">Match apps show what happened. MatchMind shows why it happened, and what would have changed it, for every key moment.</p>
+        <div class="hero-actions">
+          <a class="btn" href="analysis.html">Open the analysis</a>
+          <a class="text-link" href="#flow">See how it works</a>
         </div>
-        <label class="field field-compact">
-          <span>Speed</span>
-          <select id="speed">
-            <option value="0.5">0.5x</option>
-            <option value="1" selected>1x</option>
-            <option value="2">2x</option>
-            <option value="4">4x</option>
-          </select>
-        </label>
+        <p class="hero-note">Built on synthetic, football-realistic data. No real match data is used.</p>
+      </div>
+
+      <figure class="hero-figure">
+        <svg viewBox="0 0 105 68" role="img" aria-labelledby="heroFigCap">
+          <title id="heroFigCap">A teammate moves from a wide position to four lettered slots. Slot A gives the best chance.</title>
+          <rect x="0.5" y="0.5" width="104" height="67" fill="none" stroke="rgba(233,239,230,0.5)" stroke-width="0.5"/>
+          <line x1="52.5" y1="0.5" x2="52.5" y2="67.5" stroke="rgba(233,239,230,0.5)" stroke-width="0.5"/>
+          <circle cx="52.5" cy="34" r="9.15" fill="none" stroke="rgba(233,239,230,0.5)" stroke-width="0.5"/>
+          <rect x="0.5" y="13.8" width="16.5" height="40.4" fill="none" stroke="rgba(233,239,230,0.5)" stroke-width="0.5"/>
+          <rect x="88" y="13.8" width="16.5" height="40.4" fill="none" stroke="rgba(233,239,230,0.5)" stroke-width="0.5"/>
+          <path d="M 73 60 L 95 34" fill="none" stroke="#d7ff5a" stroke-width="0.6" stroke-dasharray="1.5 1"/>
+          <circle cx="73" cy="60" r="2.4" fill="none" stroke="#e9efe6" stroke-width="0.6"/>
+          <text x="73" y="61.2" font-size="2.6" text-anchor="middle" fill="#e9efe6">now</text>
+          <circle cx="94" cy="22" r="3" fill="#d7ff5a"/>
+          <text x="94" y="23.1" font-size="3" text-anchor="middle" fill="#07100c" font-weight="700">A</text>
+          <circle cx="88" cy="34" r="3" fill="#e9efe6"/>
+          <text x="88" y="35.1" font-size="3" text-anchor="middle" fill="#07100c" font-weight="700">B</text>
+          <circle cx="99" cy="6" r="3" fill="#ff5c6c"/>
+          <text x="99" y="7.1" font-size="3" text-anchor="middle" fill="#07100c" font-weight="700">C</text>
+          <circle cx="78" cy="34" r="3" fill="#ff5c6c"/>
+          <text x="78" y="35.1" font-size="3" text-anchor="middle" fill="#07100c" font-weight="700">D</text>
+        </svg>
+        <figcaption id="heroFigCap2">Move a teammate to a new slot and rank the chances. Slots are lettered, A is best, and each slot's xG is an estimate.</figcaption>
+      </figure>
+    </section>
+
+    <section id="gap" class="block" aria-labelledby="gapTitle">
+      <h2 id="gapTitle">The gap</h2>
+      <div class="gap-grid">
+        <p><strong>Charts show what happened.</strong> Heatmaps, shot maps and xG are standard in consumer apps.</p>
+        <p><strong>Pundits explain why.</strong> The best of them name the shape, the press and the substitution that mattered.</p>
+        <p><strong>Few tools test the alternative.</strong> What if a winger had started wide, or a midfielder had dropped deeper? Almost none show the answer, or how sure it is.</p>
       </div>
     </section>
 
-    <section class="grid" aria-label="Analysis panels">
-      <article class="panel moments">
-        <header class="panel-head">
-          <h2>Key moments</h2>
-          <p class="panel-sub">Shots, goals and high presses, with the tactical reason for each.</p>
-        </header>
-        <ol class="moment-list" id="momentList"></ol>
-        <button class="btn btn-ghost" id="exportBtn" type="button">Export 0 kept moments</button>
-        <dl class="glossary" aria-label="Glossary">
-          <div><dt>xG</dt><dd>Expected goals: a model estimate of a shot's chance, from distance and angle. Not a betting or odds signal.</dd></div>
-          <div><dt>Half-space</dt><dd>The lane between the centre and the wing, where chances often start.</dd></div>
-          <div><dt>Overload</dt><dd>More teammates than opponents near the ball.</dd></div>
-          <div><dt>Press</dt><dd>Winning the ball high up with several players close by.</dd></div>
-          <div><dt>Phase</dt><dd>In possession, or out of possession and pressing.</dd></div>
-        </dl>
-      </article>
+    <section id="flow" class="block" aria-labelledby="flowTitle">
+      <h2 id="flowTitle">How it works</h2>
+      <p class="block-lede">One match goes through six steps. Each step passes its evidence to the next, so a claim on screen can be traced back to the events behind it.</p>
+      <ol class="flow" aria-label="Six steps from events to curated moments">
+        <li>
+          <h3>Events</h3>
+          <p>Passes, carries, shots, tackles and substitutions, with player positions at each moment.</p>
+        </li>
+        <li>
+          <h3>Detect</h3>
+          <p>Adds zones, progression, pressure and cover to every event.</p>
+        </li>
+        <li>
+          <h3>Tag</h3>
+          <p>Labels each event with its tactical reason: half-space entry, overload, a high press. The thresholds are tuned against planted truth.</p>
+        </li>
+        <li>
+          <h3>Test</h3>
+          <p>Moves the nearest teammate to four slots and ranks the chances, with the reasons and a calibration check.</p>
+        </li>
+        <li>
+          <h3>Narrate</h3>
+          <p>Writes a line for each event and a recap. Every claim links to the events it relies on.</p>
+        </li>
+        <li>
+          <h3>Curate</h3>
+          <p>Producers keep or drop each moment and export the kept list for a highlight package.</p>
+        </li>
+      </ol>
+    </section>
 
-      <article class="panel whatif">
-        <header class="panel-head">
-          <h2>What if</h2>
-          <p class="panel-sub" id="cfSub"></p>
-        </header>
-        <div class="cf-figure">
-          <canvas id="cfPitch" role="img" aria-labelledby="cfDesc"></canvas>
-          <p class="chart-desc" id="cfDesc"></p>
-          <p class="cf-legend">
-            <span class="key key-hollow"></span> current position
-            <span class="key key-dot"></span> slot A to D (A is best)
-            <span class="key key-cross"></span> shot origin
-          </p>
+    <section id="users" class="block" aria-labelledby="usersTitle">
+      <h2 id="usersTitle">Who it is for</h2>
+      <div class="users-grid">
+        <div>
+          <h3>Producers and broadcasters</h3>
+          <p>A ranked list of moments with a reason for each, ready to approve or drop.</p>
         </div>
-        <ul class="cf-options" id="cfOptions"></ul>
-        <p class="note">Estimates from a transparent model on synthetic data, not football facts.</p>
-        <div id="calib" class="calib"></div>
-      </article>
-
-      <article class="panel side">
-        <section class="block">
-          <header class="panel-head">
-            <h2>Heatmap</h2>
-            <div class="filters">
-              <label class="field field-compact">
-                <span>Team</span>
-                <select id="heatTeam">
-                  <option value="">Both</option>
-                  <option value="0">Northbank FC</option>
-                  <option value="1">Riverside City</option>
-                </select>
-              </label>
-              <label class="field field-compact">
-                <span>Player</span>
-                <select id="heatPlayer"></select>
-              </label>
-            </div>
-          </header>
-          <canvas id="heat" class="heat-canvas" role="img" aria-labelledby="heatDesc"></canvas>
-          <p class="chart-desc" id="heatDesc"></p>
-          <p class="legend-row"><span class="scale" aria-hidden="true"></span> less time &rarr; more time</p>
-        </section>
-        <section class="block">
-          <header class="panel-head">
-            <h2>Pressure faced</h2>
-            <p class="panel-sub">Defenders within 7 units of the ball, per minute.</p>
-          </header>
-          <canvas id="pressure" class="pressure-canvas" role="img" aria-labelledby="pressureDesc"></canvas>
-          <p class="chart-desc" id="pressureDesc"></p>
-          <p class="legend-row">
-            <span class="swatch swatch-home"></span> Northbank, solid
-            <span class="swatch swatch-away swatch-dashed"></span> Riverside, dashed
-          </p>
-        </section>
-      </article>
+        <div>
+          <h3>Analysts and coaches</h3>
+          <p>Shape, pressing and substitution reasons next to the 3D pitch, with an agent trace of how each label was made.</p>
+        </div>
+        <div>
+          <h3>Fans</h3>
+          <p>A plain-language reason for each key moment, with a glossary for xG, half-space, overload and press.</p>
+        </div>
+      </div>
     </section>
 
-    <section class="recap" aria-labelledby="recapTitle">
-      <header class="panel-head">
-        <h2 id="recapTitle">Match recap</h2>
-      </header>
-      <div class="recap-body" id="recap"></div>
+    <section class="block honest" aria-labelledby="honestTitle">
+      <h2 id="honestTitle">What it does not claim</h2>
+      <ul class="plain-list">
+        <li>The data is synthetic. Tactical labels agree with the generator, not with real football.</li>
+        <li>What-if values are model estimates, not predictions, and nothing here is betting or odds advice.</li>
+        <li>Substitution impact is descriptive, not a causal effect.</li>
+      </ul>
     </section>
 
-    <section class="trace">
-      <details>
-        <summary>Agent trace</summary>
-        <ol id="trace" class="trace-list"></ol>
-      </details>
+    <section class="cta" aria-labelledby="ctaTitle">
+      <h2 id="ctaTitle">See one match, end to end.</h2>
+      <a class="btn" href="analysis.html">Open the analysis</a>
     </section>
   </main>
 
-  <script src="js/engine.js"></script>
-  <script src="js/agents.js"></script>
-  <script src="js/pitch.js"></script>
-  <script src="js/pitch3d.js"></script>
-  <script src="js/charts.js"></script>
-  <script src="js/app.js"></script>
+  <footer class="footer">
+    <p>MatchMind · Built for the Inside the Game: Developer Hackathon · <a href="https://github.com/dhairya-pandya/matchmind">Source on GitHub</a></p>
+  </footer>
 </body>
 </html>

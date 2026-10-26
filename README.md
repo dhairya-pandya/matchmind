@@ -44,7 +44,7 @@ The path is an adapter, not a rewrite. The StatsBomb-format adapter already maps
 ## Try it
 
 ```bash
-npm run serve      # open http://localhost:8080
+npm run serve      # overview at http://localhost:8080, analysis at /analysis.html
 npm test           # engine rules and adapter round trip
 npm run optimize   # re-tune the tactics skill, about 2 seconds
 ```
