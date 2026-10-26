@@ -74,6 +74,8 @@
     }
     buildScoreline();
     buildTicks();
+    app.curation = {};
+    buildViewerControls();
     buildMoments();
     currentMomentN = null;
     buildHeatPlayers();
@@ -151,8 +153,8 @@
   function buildMoments() {
     const list = $('#momentList');
     list.textContent = '';
-    const { match, keyMoments } = app.state;
-    app.curation = {};
+    const { match } = app.state;
+    const keyMoments = visibleMoments();
     keyMoments.forEach((ev) => {
       const li = el('li', 'moment-row');
       const btn = el('button', 'moment');
@@ -177,6 +179,41 @@
       list.appendChild(li);
     });
     updateExportCount();
+  }
+
+  // Viewer modes: the same moments, filtered and ordered for a different audience.
+  function visibleMoments() {
+    const { keyMoments } = app.state;
+    const mode = $('#viewMode').value;
+    const player = Number($('#viewPlayer').value);
+    if (mode === 'casual') {
+      return keyMoments.filter((ev) => ev.type === 'sub' || (ev.type === 'shot' && (ev.goal || ev.xg >= 0.05)));
+    }
+    if (mode === 'player') {
+      return keyMoments.filter((ev) => ev.player === player || ev.tackler === player || ev.lost === player);
+    }
+    return keyMoments;
+  }
+
+  function buildViewerControls() {
+    const sel = $('#viewPlayer');
+    sel.textContent = '';
+    app.match.squad.forEach((ids, t) => ids.forEach((id) => {
+      const p = app.match.players[id];
+      sel.appendChild(new Option(`${p.name} (${app.match.teams[t].short})`, String(id)));
+    }));
+  }
+
+  function downloadFeed() {
+    const feed = MM.feed.buildFeed(app.match, app.state);
+    const blob = new Blob([JSON.stringify(feed, null, 2)], { type: 'application/json' });
+    const a = el('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `matchmind-overlays-${app.match.seed}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   }
 
   // Producer control: keep or drop a moment for the highlight package. Kept state is per session.
@@ -472,6 +509,12 @@
     $('#scrub').addEventListener('input', (e) => { pause(); setT(Number(e.target.value)); });
 
     $('#exportBtn').addEventListener('click', exportKept);
+    $('#feedBtn').addEventListener('click', downloadFeed);
+    $('#viewMode').addEventListener('change', () => {
+      $('#playerLabel').hidden = $('#viewMode').value !== 'player';
+      buildMoments();
+    });
+    $('#viewPlayer').addEventListener('change', buildMoments);
 
     $('#heatTeam').addEventListener('change', () => { buildHeatPlayers(); drawAllCharts(); });
     $('#heatPlayer').addEventListener('change', drawAllCharts);

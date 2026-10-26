@@ -1,0 +1,327 @@
+{
+  "version": "1.0",
+  "synthetic": true,
+  "note": "Synthetic, football-realistic data. xG is a model estimate.",
+  "match": {
+    "seed": 42,
+    "home": "Northbank FC",
+    "away": "Riverside City",
+    "score": [
+      1,
+      0
+    ]
+  },
+  "overlays": [
+    {
+      "t": 0,
+      "minute": 0,
+      "kind": "window",
+      "text": "Minutes 0 to 10: controlled phase, 14% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 144,
+      "minute": 3,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Moreau",
+      "text": "Moreau wins it from Achebe high up the pitch.",
+      "why": "Why it matters: high press won the ball. Phase: out of possession (pressing).",
+      "event": 24
+    },
+    {
+      "t": 192,
+      "minute": 4,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Delgado",
+      "text": "Delgado scores from 31.8 units out (xG 0.011).",
+      "why": "Why it matters: 1 defender in the shooting lane. Phase: in possession.",
+      "event": 32,
+      "xg": 0.011
+    },
+    {
+      "t": 336,
+      "minute": 6,
+      "kind": "press",
+      "team": "Riverside City",
+      "player": "Rowe",
+      "text": "Rowe wins it from Moreau high up the pitch.",
+      "why": "Why it matters: high press won the ball. Phase: out of possession (pressing).",
+      "event": 56
+    },
+    {
+      "t": 342,
+      "minute": 6,
+      "kind": "shot",
+      "team": "Riverside City",
+      "player": "Holt",
+      "text": "Holt shoots from 23 units out (xG 0.029), 2 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane. Phase: in possession.",
+      "event": 57,
+      "xg": 0.029
+    },
+    {
+      "t": 528,
+      "minute": 9,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Quill",
+      "text": "Quill wins it from Lamb high up the pitch.",
+      "why": "Why it matters: high press won the ball. Phase: out of possession (pressing).",
+      "event": 88
+    },
+    {
+      "t": 546,
+      "minute": 10,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Okafor",
+      "text": "Okafor wins it from Aziz high up the pitch.",
+      "why": "Why it matters: high press won the ball. Phase: out of possession (pressing).",
+      "event": 91
+    },
+    {
+      "t": 600,
+      "minute": 10,
+      "kind": "window",
+      "text": "Minutes 10 to 20: even phase, 22% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 732,
+      "minute": 13,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Ruiz",
+      "text": "Ruiz wins it from Lamb high up the pitch.",
+      "why": "Why it matters: high press won the ball. Phase: out of possession (pressing).",
+      "event": 122
+    },
+    {
+      "t": 924,
+      "minute": 16,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Ashdown",
+      "text": "Ashdown wins it from Sorensen high up the pitch.",
+      "why": "Why it matters: high press won the ball. Phase: out of possession (pressing).",
+      "event": 154
+    },
+    {
+      "t": 1200,
+      "minute": 20,
+      "kind": "window",
+      "text": "Minutes 20 to 30: even phase, 16% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 1344,
+      "minute": 23,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Okafor",
+      "text": "Okafor shoots from 35.9 units out (xG 0.01), 2 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane. Phase: in possession.",
+      "event": 224,
+      "xg": 0.01
+    },
+    {
+      "t": 1800,
+      "minute": 30,
+      "kind": "window",
+      "text": "Minutes 30 to 40: even phase, 17% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 2220,
+      "minute": 38,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Delgado",
+      "text": "Delgado shoots from 32 units out (xG 0.01), 2 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane. Phase: in possession.",
+      "event": 370,
+      "xg": 0.01
+    },
+    {
+      "t": 2400,
+      "minute": 40,
+      "kind": "window",
+      "text": "Minutes 40 to 50: even phase, 21% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 2406,
+      "minute": 41,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Moreau",
+      "text": "Moreau wins it from Holt high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 401
+    },
+    {
+      "t": 2472,
+      "minute": 42,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Nakamura",
+      "text": "Nakamura shoots from 34.7 units out (xG 0.01), 2 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane, outnumbered by 2. Phase: in possession.",
+      "event": 412,
+      "xg": 0.01
+    },
+    {
+      "t": 2556,
+      "minute": 43,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Delgado",
+      "text": "Delgado shoots from 28 units out (xG 0.018), 1 defender(s) in the lane.",
+      "why": "Why it matters: 1 defender in the shooting lane. Phase: in possession.",
+      "event": 426,
+      "xg": 0.018
+    },
+    {
+      "t": 2802,
+      "minute": 47,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Ruiz",
+      "text": "Ruiz shoots from 29.6 units out (xG 0.013), 2 defender(s) in the lane.",
+      "why": "Why it matters: 2 defenders in the shooting lane. Phase: in possession.",
+      "event": 467,
+      "xg": 0.013
+    },
+    {
+      "t": 3000,
+      "minute": 50,
+      "kind": "window",
+      "text": "Minutes 50 to 60: even phase, 18% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 3096,
+      "minute": 52,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Ruiz",
+      "text": "Ruiz shoots from 30.4 units out (xG 0.013), 1 defender(s) in the lane.",
+      "why": "Why it matters: 1 defender in the shooting lane. Phase: in possession.",
+      "event": 516,
+      "xg": 0.013
+    },
+    {
+      "t": 3432,
+      "minute": 58,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Varga",
+      "text": "Varga wins it from Quade high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 572
+    },
+    {
+      "t": 3474,
+      "minute": 58,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Delgado",
+      "text": "Delgado shoots from 32.6 units out (xG 0.01), 2 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane. Phase: in possession.",
+      "event": 579,
+      "xg": 0.01
+    },
+    {
+      "t": 3480,
+      "minute": 59,
+      "kind": "substitution",
+      "team": "Northbank FC",
+      "player": "Pryce",
+      "text": "Pryce replaces Moreau (Northbank FC, leading 1-0).",
+      "why": "Shots and xG for Northbank FC: 15 minutes before, 3 shots (0.04 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 580
+    },
+    {
+      "t": 3540,
+      "minute": 60,
+      "kind": "substitution",
+      "team": "Riverside City",
+      "player": "Marsh",
+      "text": "Marsh replaces Quade (Riverside City, trailing 1-0).",
+      "why": "Shots and xG for Riverside City: 15 minutes before, 0 shots (0 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 590
+    },
+    {
+      "t": 3600,
+      "minute": 60,
+      "kind": "window",
+      "text": "Minutes 60 to 70: controlled phase, 14% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 3600,
+      "minute": 61,
+      "kind": "substitution",
+      "team": "Northbank FC",
+      "player": "Osei",
+      "text": "Osei replaces Varga (Northbank FC, leading 1-0).",
+      "why": "Shots and xG for Northbank FC: 15 minutes before, 3 shots (0.04 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 600
+    },
+    {
+      "t": 3660,
+      "minute": 62,
+      "kind": "substitution",
+      "team": "Riverside City",
+      "player": "Ibe",
+      "text": "Ibe replaces Sorensen (Riverside City, trailing 1-0).",
+      "why": "Shots and xG for Riverside City: 15 minutes before, 0 shots (0 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 610
+    },
+    {
+      "t": 3720,
+      "minute": 63,
+      "kind": "substitution",
+      "team": "Northbank FC",
+      "player": "Lane",
+      "text": "Lane replaces Ruiz (Northbank FC, leading 1-0).",
+      "why": "Shots and xG for Northbank FC: 15 minutes before, 2 shots (0.02 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 620
+    },
+    {
+      "t": 3780,
+      "minute": 63,
+      "kind": "substitution",
+      "team": "Riverside City",
+      "player": "Tate",
+      "text": "Tate replaces Ferraro (Riverside City, trailing 1-0).",
+      "why": "Shots and xG for Riverside City: 15 minutes before, 0 shots (0 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 630
+    },
+    {
+      "t": 4200,
+      "minute": 70,
+      "kind": "window",
+      "text": "Minutes 70 to 80: even phase, 18% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 4800,
+      "minute": 80,
+      "kind": "window",
+      "text": "Minutes 80 to 90: controlled phase, 10% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    }
+  ]
+}

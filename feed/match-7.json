@@ -1,0 +1,294 @@
+{
+  "version": "1.0",
+  "synthetic": true,
+  "note": "Synthetic, football-realistic data. xG is a model estimate.",
+  "match": {
+    "seed": 7,
+    "home": "Northbank FC",
+    "away": "Riverside City",
+    "score": [
+      0,
+      0
+    ]
+  },
+  "overlays": [
+    {
+      "t": 0,
+      "minute": 0,
+      "kind": "window",
+      "text": "Minutes 0 to 10: even phase, 20% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 36,
+      "minute": 1,
+      "kind": "shot",
+      "team": "Riverside City",
+      "player": "Sorensen",
+      "text": "Sorensen shoots from 31.3 units out (xG 0.011), 2 defender(s) in the lane.",
+      "why": "Why it matters: 2 defenders in the shooting lane, outnumbered by 2. Phase: in possession.",
+      "event": 6,
+      "xg": 0.011
+    },
+    {
+      "t": 276,
+      "minute": 5,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Lindqvist",
+      "text": "Lindqvist wins it from Quade high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 46
+    },
+    {
+      "t": 462,
+      "minute": 8,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Haddad",
+      "text": "Haddad wins it from Pennock high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 77
+    },
+    {
+      "t": 600,
+      "minute": 10,
+      "kind": "window",
+      "text": "Minutes 10 to 20: even phase, 16% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 612,
+      "minute": 11,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Quill",
+      "text": "Quill wins it from Sorensen high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 102
+    },
+    {
+      "t": 1200,
+      "minute": 20,
+      "kind": "window",
+      "text": "Minutes 20 to 30: controlled phase, 11% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 1272,
+      "minute": 22,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Okafor",
+      "text": "Okafor wins it from Sorensen high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 212
+    },
+    {
+      "t": 1800,
+      "minute": 30,
+      "kind": "window",
+      "text": "Minutes 30 to 40: even phase, 18% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 1920,
+      "minute": 33,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Brennan",
+      "text": "Brennan shoots from 20.6 units out (xG 0.039), 2 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane. Phase: in possession.",
+      "event": 320,
+      "xg": 0.039
+    },
+    {
+      "t": 2400,
+      "minute": 40,
+      "kind": "window",
+      "text": "Minutes 40 to 50: even phase, 22% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 2430,
+      "minute": 41,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Quill",
+      "text": "Quill wins it from Lamb high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 405
+    },
+    {
+      "t": 2748,
+      "minute": 46,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Ruiz",
+      "text": "Ruiz shoots from 30.2 units out (xG 0.012), 2 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 2 defenders in the shooting lane, outnumbered by 2. Phase: in possession.",
+      "event": 458,
+      "xg": 0.012
+    },
+    {
+      "t": 2790,
+      "minute": 47,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Ruiz",
+      "text": "Ruiz wins it from Quade high up the pitch.",
+      "why": "Why it matters: numerical overload +2, high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 465
+    },
+    {
+      "t": 2856,
+      "minute": 48,
+      "kind": "shot",
+      "team": "Northbank FC",
+      "player": "Ruiz",
+      "text": "Ruiz shoots from 29.7 units out (xG 0.014), 1 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 1 defender in the shooting lane. Phase: in possession.",
+      "event": 476,
+      "xg": 0.014
+    },
+    {
+      "t": 3000,
+      "minute": 50,
+      "kind": "window",
+      "text": "Minutes 50 to 60: even phase, 16% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 3066,
+      "minute": 52,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Haddad",
+      "text": "Haddad wins it from Kessler high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 511
+    },
+    {
+      "t": 3186,
+      "minute": 54,
+      "kind": "shot",
+      "team": "Riverside City",
+      "player": "Quade",
+      "text": "Quade shoots from 26.2 units out (xG 0.02), 2 defender(s) in the lane.",
+      "why": "Why it matters: 2 defenders in the shooting lane, outnumbered by 2. Phase: in possession.",
+      "event": 531,
+      "xg": 0.02
+    },
+    {
+      "t": 3210,
+      "minute": 54,
+      "kind": "shot",
+      "team": "Riverside City",
+      "player": "Pennock",
+      "text": "Pennock shoots from 26.8 units out (xG 0.02), 1 defender(s) in the lane.",
+      "why": "Why it matters: shot from a half-space, 1 defender in the shooting lane. Phase: in possession.",
+      "event": 535,
+      "xg": 0.02
+    },
+    {
+      "t": 3324,
+      "minute": 56,
+      "kind": "press",
+      "team": "Northbank FC",
+      "player": "Ashdown",
+      "text": "Ashdown wins it from Sorensen high up the pitch.",
+      "why": "Why it matters: high press won the ball, pressing trap sprung. Phase: out of possession (pressing).",
+      "event": 554
+    },
+    {
+      "t": 3480,
+      "minute": 59,
+      "kind": "substitution",
+      "team": "Northbank FC",
+      "player": "Pryce",
+      "text": "Pryce replaces Ruiz (Northbank FC, level 0-0).",
+      "why": "Shots and xG for Northbank FC: 15 minutes before, 2 shots (0.03 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 580
+    },
+    {
+      "t": 3540,
+      "minute": 60,
+      "kind": "substitution",
+      "team": "Riverside City",
+      "player": "Marsh",
+      "text": "Marsh replaces Sorensen (Riverside City, level 0-0).",
+      "why": "Shots and xG for Riverside City: 15 minutes before, 2 shots (0.04 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 590
+    },
+    {
+      "t": 3600,
+      "minute": 60,
+      "kind": "window",
+      "text": "Minutes 60 to 70: even phase, 20% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 3600,
+      "minute": 61,
+      "kind": "substitution",
+      "team": "Northbank FC",
+      "player": "Osei",
+      "text": "Osei replaces Delgado (Northbank FC, level 0-0).",
+      "why": "Shots and xG for Northbank FC: 15 minutes before, 2 shots (0.03 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 600
+    },
+    {
+      "t": 3660,
+      "minute": 62,
+      "kind": "substitution",
+      "team": "Riverside City",
+      "player": "Ibe",
+      "text": "Ibe replaces Ferraro (Riverside City, level 0-0).",
+      "why": "Shots and xG for Riverside City: 15 minutes before, 2 shots (0.04 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 610
+    },
+    {
+      "t": 3720,
+      "minute": 63,
+      "kind": "substitution",
+      "team": "Northbank FC",
+      "player": "Lane",
+      "text": "Lane replaces Nakamura (Northbank FC, level 0-0).",
+      "why": "Shots and xG for Northbank FC: 15 minutes before, 1 shots (0.01 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 620
+    },
+    {
+      "t": 3780,
+      "minute": 63,
+      "kind": "substitution",
+      "team": "Riverside City",
+      "player": "Tate",
+      "text": "Tate replaces Rowe (Riverside City, level 0-0).",
+      "why": "Shots and xG for Riverside City: 15 minutes before, 2 shots (0.04 xG); 15 minutes after, 0 shots (0 xG). Descriptive, not a causal estimate.",
+      "event": 630
+    },
+    {
+      "t": 4200,
+      "minute": 70,
+      "kind": "window",
+      "text": "Minutes 70 to 80: controlled phase, 9% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    },
+    {
+      "t": 4800,
+      "minute": 80,
+      "kind": "window",
+      "text": "Minutes 80 to 90: even phase, 18% of possession changes hands.",
+      "why": "Control share is passes and carries; chaos is tackles that change hands.",
+      "event": null
+    }
+  ]
+}

@@ -85,6 +85,14 @@
         ballY: round(ball[1], 1),
         cover,
       };
+      // Pass quality and speed. Clock: the synthetic match runs 90 minutes over all events.
+      if (ev.type === 'pass' || ev.type === 'carry') {
+        const d = ev.to ? dist(ev.from, ev.to) : 0;
+        const secPerEvent = (90 * 60) / match.total;
+        ev.feat.passDistance = round(d, 1);
+        ev.feat.difficulty = Math.round(clamp(1 + d / 12 + ev.pressure * 0.5, 1, 5));
+        ev.feat.speed = round(d / secPerEvent, 1); // metres per second, pitch units are metres
+      }
       if (ev.type === 'shot') shots++;
     }
     state.log('Event detector', `Scanned ${match.events.length} events, ${shots} shots, geometry added to each.`);
@@ -354,6 +362,24 @@
     return { moments, recap: claims };
   }
 
+  // ---------- Control and chaos ----------
+  // Per 10-minute window: control share (passes and carries that keep the ball) against
+  // chaos (tackles that change hands). A window is labelled by its dominant pattern.
+  function windowsOf(match) {
+    const out = [];
+    for (let from = 0; from < 90; from += 10) {
+      const to = Math.min(90, from + 10);
+      const evs = match.events.filter((e) => e.minute > from && e.minute <= to && e.type !== 'sub');
+      const keep = evs.filter((e) => e.type === 'pass' || e.type === 'carry').length;
+      const turnovers = evs.filter((e) => e.type === 'tackle').length;
+      const total = keep + turnovers || 1;
+      const chaos = round(turnovers / total, 2);
+      const label = chaos >= 0.3 ? 'chaotic' : chaos <= 0.15 ? 'controlled' : 'even';
+      out.push({ from, to, events: evs.length, turnoverShare: chaos, label });
+    }
+    return out;
+  }
+
   // ---------- Orchestrator ----------
   function runPipeline(match, skillText) {
     const trace = [];
@@ -368,9 +394,11 @@
     tactics(match, state, skill);
     const cfs = counterfactualAgent(match, state);
     const { moments, recap } = narrator(match, state);
+    const windows = windowsOf(match);
+    state.log('Control', `Labelled ${windows.length} ten-minute windows as controlled, even or chaotic.`);
 
     state.log('Orchestrator', 'Pipeline complete. Shared state is ready for the UI.');
-    return { match, keyMoments: moments, cfs, recap, trace, skill };
+    return { match, keyMoments: moments, cfs, recap, trace, skill, windows };
   }
 
   MM.agents = { runPipeline, counterfactual, parseSkill, DEFAULT_SKILL, SKILL_SPACE };
